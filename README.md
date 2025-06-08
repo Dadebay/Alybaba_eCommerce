@@ -10,7 +10,7 @@ Download the app from the Google Play Store:
 Download the app from the Apple Store :
 !https://play.google.com/store/apps/details?id=com.gurbanow.alybaba&hl=ru&gl=ES
 
-
+ 
 ## Features
 
 - **User Authentication**: Secure login and registration.
