@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:carousel_slider/carousel_slider.dart' as carousel;
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nabelli_ecommerce/app/constants/buttons/add_cart_button.dart';
@@ -179,7 +180,7 @@ Container imagesView(List<dynamic> images) {
     margin: const EdgeInsets.only(bottom: 15),
     child: images.isEmpty
         ? noBannerImage()
-        : CarouselSlider.builder(
+        : carousel.CarouselSlider.builder(
             itemCount: images.length,
             itemBuilder: (context, index, count) {
               return GestureDetector(
@@ -207,8 +208,8 @@ Container imagesView(List<dynamic> images) {
                 ),
               );
             },
-            options: CarouselOptions(
-              onPageChanged: (index, CarouselPageChangedReason a) {},
+            options: carousel.CarouselOptions(
+              onPageChanged: (index, carousel.CarouselPageChangedReason a) {},
               viewportFraction: 1.0,
               autoPlay: true,
               height: Get.size.height,

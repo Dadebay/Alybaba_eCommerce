@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, void_checks, always_use_package_imports
 
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:carousel_slider/carousel_slider.dart' as carousel;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,7 +26,7 @@ class _PhotoViewPageMoreImageState extends State<PhotoViewPageMoreImage> {
         backgroundColor: Colors.black,
         body: Stack(
           children: [
-            CarouselSlider.builder(
+            carousel.CarouselSlider.builder(
               itemCount: widget.images.length,
               itemBuilder: (context, index, count) {
                 return PhotoView(
@@ -39,8 +40,8 @@ class _PhotoViewPageMoreImageState extends State<PhotoViewPageMoreImage> {
                   loadingBuilder: (context, url) => spinKit(),
                 );
               },
-              options: CarouselOptions(
-                onPageChanged: (index, CarouselPageChangedReason a) {},
+              options: carousel.CarouselOptions(
+                onPageChanged: (index, carousel.CarouselPageChangedReason a) {},
                 viewportFraction: 1.0,
                 autoPlay: true,
                 height: Get.size.height,
