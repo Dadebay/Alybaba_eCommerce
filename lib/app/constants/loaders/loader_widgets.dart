@@ -1,4 +1,5 @@
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:carousel_slider/carousel_slider.dart' as carousel;
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -40,7 +41,7 @@ Widget loaderBanner() {
 }
 
 Widget loaderCategory() {
-  return CarouselSlider.builder(
+  return carousel.CarouselSlider.builder(
     itemCount: 10,
     itemBuilder: (context, index, count) {
       return Container(
@@ -52,8 +53,8 @@ Widget loaderCategory() {
         child: spinKit(),
       );
     },
-    options: CarouselOptions(
-      onPageChanged: (index, CarouselPageChangedReason a) {},
+    options: carousel.CarouselOptions(
+      onPageChanged: (index, carousel.CarouselPageChangedReason a) {},
       height: 170,
       viewportFraction: 0.6,
       autoPlay: true,

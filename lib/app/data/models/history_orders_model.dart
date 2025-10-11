@@ -3,10 +3,11 @@ class HistoryOrdersModel {
   final int? statusId;
   final int? transport;
   final String? total;
+  final String? totalTransportPrice;
   final String? createdAt;
   final String? statusText;
   final List? items;
-  HistoryOrdersModel({this.id, this.statusId, this.items, this.transport, this.total, this.createdAt, this.statusText});
+  HistoryOrdersModel({this.id, this.statusId, this.totalTransportPrice, this.items, this.transport, this.total, this.createdAt, this.statusText});
 
   factory HistoryOrdersModel.fromJson(Map<dynamic, dynamic> json) {
     return HistoryOrdersModel(
@@ -14,6 +15,7 @@ class HistoryOrdersModel {
       transport: json['transport'] ?? 1,
       total: json['total'] ?? 'Null',
       createdAt: json['created_at'] ?? '0',
+      totalTransportPrice: json['total_transport_price'] ?? '0',
       items: json['items'] ?? [],
       statusId: json['status_id'] ?? [],
       statusText: json['status_text'] ?? 'Null',
@@ -25,21 +27,26 @@ class HistoryOrdersModelByID {
   final int? id;
   final int? statusId;
   final int? transport;
+  final int? prepayment_percent;
   final String? total;
   final String? createdAt;
+  final String? totalTransportPrice;
+
   final String? statusText;
   final List<HistoryProducts>? items;
-  HistoryOrdersModelByID({this.id, this.statusId, this.items, this.transport, this.total, this.createdAt, this.statusText});
+  HistoryOrdersModelByID({this.id, this.statusId, this.items, this.totalTransportPrice, this.transport, this.total, this.createdAt, this.statusText, this.prepayment_percent});
 
   factory HistoryOrdersModelByID.fromJson(Map<dynamic, dynamic> json) {
     return HistoryOrdersModelByID(
       id: json['id'],
       transport: json['transport'] ?? 1,
       total: json['total'] ?? 'Null',
+      totalTransportPrice: json['total_transport_price'] ?? '0',
       createdAt: json['created_at'] ?? '0',
       items: (json['items'] as List).map((json) => HistoryProducts.fromJson(json)).toList(),
       statusId: json['status_id'] ?? [],
       statusText: json['status_text'] ?? 'Null',
+      prepayment_percent: json['prepayment_percent'] ?? 0,
     );
   }
 }
@@ -50,18 +57,20 @@ class HistoryProducts {
   String? color;
   String? barcode;
   String? image;
+  String? size;
   int? id;
 
-  HistoryProducts({this.name, this.price, this.id, this.barcode, this.color, this.image});
+  HistoryProducts({this.name, this.size, this.price, this.id, this.barcode, this.color, this.image});
 
   factory HistoryProducts.fromJson(Map<String, dynamic> json) {
     return HistoryProducts(
-      price: json['price'],
-      barcode: json['barcode'],
-      image: json['image'],
-      color: json['color'],
-      name: json['name'],
-      id: json['id'],
+      price: json['price'] ?? '',
+      barcode: json['barcode'] ?? '',
+      image: json['image'] ?? '',
+      size: json['size'] ?? '',
+      color: json['color'] ?? '',
+      name: json['name'] ?? '',
+      id: json['id'] ?? 0,
     );
   }
 }

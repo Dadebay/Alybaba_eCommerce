@@ -45,7 +45,8 @@ class CardCart extends StatelessWidget {
           );
         },
         style: ElevatedButton.styleFrom(
-          elevation: 0.3,
+          elevation: 3,
+          shadowColor: colorController.mainColor,
           backgroundColor: Colors.white,
           padding: EdgeInsets.zero,
           shape: const RoundedRectangleBorder(borderRadius: borderRadius25),

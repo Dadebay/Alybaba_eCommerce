@@ -1,5 +1,5 @@
 name: nabelli_ecommerce
-version: 1.0.9+9
+version: 1.4.3+17
 publish_to: none
 description: A new Flutter project.
 environment:
@@ -7,25 +7,27 @@ environment:
 
 dependencies:
   cached_network_image: any
-  carousel_slider: ^4.0.0
+  carousel_slider: ^5.1.1
   cupertino_icons: ^1.0.2
-  cloud_firestore:
-  firebase_messaging: ^14.7.10
+ 
   flutter:
     sdk: flutter
   flutter_iconly: ^1.0.2
-  awesome_notifications:
   permission_handler: ^11.0.1
   get: ^4.6.6
   get_storage: ^2.1.1
   http: any
   lottie: ^3.0.0
   pull_to_refresh: ^2.0.0
-  share: any
-  restart_app: ^1.2.1
+  share_plus: ^11.1.0
+  restart_app: ^1.3.2
   url_launcher: ^6.1.11
   photo_view: ^0.14.0
-  firebase_core_platform_interface:
+  firebase_core: ^3.13.1
+  firebase_core_platform_interface: ^6.0.0
+  firebase_messaging: ^15.2.6
+  flutter_inappwebview: ^6.1.5
+  flutter_local_notifications: ^18.0.0
 
 dev_dependencies:
   flutter_test:

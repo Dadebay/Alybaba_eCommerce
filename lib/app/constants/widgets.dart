@@ -20,7 +20,7 @@ import '../modules/other_pages/show_all_products.dart';
 final ColorController colorController = Get.put(ColorController());
 final CartPageController cartController = Get.put(CartPageController());
 
-Widget searchField(TextEditingController controller) {
+Widget searchField(TextEditingController controller, {required ValueChanged<String> onFieldSubmitted}) {
   final ColorController colorController = Get.put(ColorController());
   return Padding(
     padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
@@ -34,9 +34,12 @@ Widget searchField(TextEditingController controller) {
         }
         return null;
       },
-      onEditingComplete: () async {
-        await Get.to(() => ShowAllProducts(pageName: 'search', parametrs: {'search': controller.text}));
-        controller.clear();
+      // onEditingComplete: () {
+      //   Get.to(() => ShowAllProducts(pageName: 'search', parametrs: {'search': controller.text}));
+      //   controller.clear();
+      // },
+      onFieldSubmitted: (value) {
+        onFieldSubmitted(value); // Dışarıdan gelen fonksiyonu burada çağırıyoruz.
       },
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
@@ -240,27 +243,28 @@ void logOut() {
   );
 }
 
-Padding listViewName(String text, bool icon, Size size, Function() onTap) {
-  return Padding(
-    padding: const EdgeInsets.only(left: 15, right: 15, top: 35, bottom: 10),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          text.tr,
-          style: TextStyle(color: Colors.black, fontSize: size.width >= 800 ? 30 : 22, fontFamily: gilroyBold),
-        ),
-        icon
-            ? GestureDetector(
-                onTap: onTap,
-                child: Icon(
+Widget listViewName(String text, bool icon, Size size, Function() onTap) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Container(
+      color: Colors.white,
+      padding: const EdgeInsets.only(left: 15, right: 15, top: 35, bottom: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            text.tr,
+            style: TextStyle(color: Colors.black, fontSize: size.width >= 800 ? 30 : 22, fontFamily: gilroyBold),
+          ),
+          icon
+              ? Icon(
                   IconlyBroken.arrowRightCircle,
                   color: Colors.black,
                   size: size.width >= 800 ? 35 : 25,
-                ),
-              )
-            : const SizedBox.shrink(),
-      ],
+                )
+              : const SizedBox.shrink(),
+        ],
+      ),
     ),
   );
 }
@@ -508,26 +512,44 @@ Widget DeleteButton() {
   );
 }
 
-AppBar homeViewAppBar() {
+AppBar homeViewAppBar(bool? showArrow) {
   final TextEditingController textEditingController = TextEditingController();
-
+  print(showArrow);
   return AppBar(
     elevation: 0,
     toolbarHeight: 80,
     backgroundColor: colorController.mainColor,
     centerTitle: true,
-    systemOverlayStyle: SystemUiOverlayStyle(
-      statusBarColor: colorController.mainColor,
-    ),
     leadingWidth: 0.0,
     titleSpacing: 0.0,
+    automaticallyImplyLeading: false,
     shadowColor: colorController.mainColor,
     foregroundColor: colorController.mainColor,
     scrolledUnderElevation: 0.0,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(bottomRight: Radius.circular(20), bottomLeft: Radius.circular(20))),
     title: Container(
       width: Get.size.width,
-      child: searchField(textEditingController),
+      child: Row(
+        children: [
+          showArrow == true
+              ? GestureDetector(
+                  onTap: () {
+                    Get.back();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 5, top: 5),
+                    child: Icon(IconlyLight.arrowLeftCircle, color: Colors.white),
+                  ))
+              : SizedBox.shrink(),
+          Expanded(
+              child: searchField(textEditingController, onFieldSubmitted: (String value) {
+            if (value.isNotEmpty) {
+              Get.to(() => ShowAllProducts(pageName: 'search', parametrs: {'search': value}));
+              textEditingController.clear();
+            }
+          })),
+        ],
+      ),
     ),
   );
 }

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:get/get.dart';
@@ -6,8 +7,11 @@ import 'package:nabelli_ecommerce/app/constants/constants.dart';
 import 'package:nabelli_ecommerce/app/constants/errors/error_widgets.dart';
 import 'package:nabelli_ecommerce/app/constants/loaders/loader_widgets.dart';
 import 'package:nabelli_ecommerce/app/data/models/history_orders_model.dart';
+import 'package:nabelli_ecommerce/app/data/services/history_order_service.dart';
 import 'package:nabelli_ecommerce/app/modules/home/controllers/color_controller.dart';
 import 'package:nabelli_ecommerce/app/modules/user_profil/history_order/history_order_status_wait.dart';
+
+import '../widgets.dart';
 
 class OrderHistoryCard extends StatelessWidget {
   OrderHistoryCard({required this.index, required this.snapshot, Key? key}) : super(key: key);
@@ -15,8 +19,9 @@ class OrderHistoryCard extends StatelessWidget {
   final AsyncSnapshot<List<HistoryOrdersModel>> snapshot;
   final ColorController colorController = Get.put(ColorController());
 
-  Widget bottomPart1(String name1, String name2) {
+  Widget bottomPart1(String name1, String name2, int flex) {
     return Expanded(
+      flex: flex,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -43,25 +48,43 @@ class OrderHistoryCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "${"order".tr} ${index + 1}",
-              style: const TextStyle(color: Colors.black, fontSize: 18, fontFamily: gilroySemiBold),
-            ),
-            Text(
-              snapshot.data![index].createdAt!,
-              style: TextStyle(color: colorController.mainColor, fontSize: 15, fontFamily: gilroyRegular),
-            ),
-          ],
+        Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "${"order".tr} #${snapshot.data![index].id}",
+                style: const TextStyle(color: Colors.black, fontSize: 18, fontFamily: gilroySemiBold),
+              ),
+              Text(
+                snapshot.data![index].createdAt!,
+                style: TextStyle(color: colorController.mainColor, fontSize: 15, fontFamily: gilroyRegular),
+              ),
+            ],
+          ),
         ),
-        const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Icon(
-            IconlyLight.arrowRightCircle,
+        IconButton(
+          onPressed: () {
+            customDialogToUse(
+              title: 'cancelOrderTitle'.tr,
+              subtitle: 'cancelOrderSubtitle'.tr,
+              changeColor: false,
+              onAgree: () async {
+                Get.back();
+                bool success = await HistoryOrdersService().cancelOrder(snapshot.data![index].id!);
+                if (success) {
+                  showSnackBar('success'.tr, 'orderCancelledSuccessfully'.tr, Colors.green);
+                } else {
+                  showSnackBar('error'.tr, 'orderCancellationFailed'.tr, Colors.red);
+                }
+              },
+            );
+          },
+          padding: EdgeInsets.zero,
+          icon: const Icon(
+            CupertinoIcons.xmark_circle,
             color: Colors.black,
-            size: 25,
           ),
         ),
       ],
@@ -70,6 +93,7 @@ class OrderHistoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double sumPrice = double.parse(snapshot.data![index].total.toString()) + double.parse(snapshot.data![index].totalTransportPrice.toString());
     return GestureDetector(
       onTap: () {
         Get.to(
@@ -81,7 +105,7 @@ class OrderHistoryCard extends StatelessWidget {
       },
       child: Container(
         margin: const EdgeInsets.all(8),
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+        padding: const EdgeInsets.only(left: 10, right: 0, top: 0, bottom: 10),
         decoration: BoxDecoration(
           borderRadius: borderRadius10,
           color: snapshot.data![index].statusId == 2
@@ -139,9 +163,9 @@ class OrderHistoryCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                bottomPart1('products', '${snapshot.data![index].items!.length} haryt '),
-                bottomPart1('status', snapshot.data![index].statusText!),
-                bottomPart1('sum', '${snapshot.data![index].total.toString().substring(0, snapshot.data![index].total!.length - 3)} TMT'),
+                bottomPart1('products', '${snapshot.data![index].items!.length} haryt ', 1),
+                bottomPart1('status', snapshot.data![index].statusText!, 2),
+                bottomPart1('sum', '${sumPrice.toString().substring(0, snapshot.data![index].total!.length - 3)} TMT', 1),
               ],
             ),
           ],

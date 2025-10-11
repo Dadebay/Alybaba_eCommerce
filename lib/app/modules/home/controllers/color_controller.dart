@@ -13,6 +13,8 @@ class ColorController extends GetxController {
       mainColor = kPrimaryColor;
     } else if (findMainColor.value == 1) {
       mainColor = kPrimaryColor1;
+    }else if (findMainColor.value == 2) {
+      mainColor = kPrimaryColor2;
     } else {
       mainColor = kPrimaryColor3;
     }

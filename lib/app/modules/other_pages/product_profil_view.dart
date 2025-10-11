@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/get_utils.dart';
+import 'package:nabelli_ecommerce/app/constants/buttons/fav_button_view.dart';
 import 'package:nabelli_ecommerce/app/constants/cards/product_card.dart';
 import 'package:nabelli_ecommerce/app/constants/custom_app_bar.dart';
 import 'package:nabelli_ecommerce/app/constants/loaders/loader_widgets.dart';
@@ -6,7 +8,7 @@ import 'package:nabelli_ecommerce/app/constants/widgets.dart';
 import 'package:nabelli_ecommerce/app/data/models/product_model.dart';
 import 'package:nabelli_ecommerce/app/data/services/product_service.dart';
 import 'package:nabelli_ecommerce/app/modules/other_pages/local_widget_other_page.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../constants/constants.dart';
 import '../../constants/errors/empty_widgets.dart';
@@ -59,19 +61,33 @@ class _ProductProfilViewState extends State<ProductProfilView> {
       appBar: CustomAppBar(
         backArrow: true,
         actionIcon: true,
-        icon: GestureDetector(
-          onTap: () {
-            Share.share(widget.image, subject: appName);
-          },
-          child: Container(
-            margin: const EdgeInsets.only(top: 8, bottom: 4, right: 15),
-            child: Image.asset(
-              shareIcon,
-              width: 24,
-              height: 24,
-              color: Colors.white,
+        icon: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            GestureDetector(
+              onTap: () {
+                Share.share(widget.image, subject: appName);
+              },
+              child: Container(
+                margin: const EdgeInsets.only(top: 8, bottom: 4, right: 15),
+                child: Image.asset(
+                  shareIcon,
+                  width: 24,
+                  height: 24,
+                  color: Colors.white,
+                ),
+              ),
             ),
-          ),
+            FavButton(
+              whiteColor: false,
+              createdAt: DateTime.now().toString(),
+              id: widget.id,
+              price: widget.price,
+              name: widget.name,
+              image: widget.image,
+            ),
+            SizedBox(width: 8),
+          ],
         ),
         name: widget.name,
       ),
@@ -85,6 +101,12 @@ class _ProductProfilViewState extends State<ProductProfilView> {
           } else if (snapshot.hasError) {
             return Container(color: Colors.amber, child: referalPageError());
           }
+          print(snapshot.data);
+          print(snapshot.data!.orderCount!.toString());
+          print(snapshot.data!.orderCount!.toString());
+          print(snapshot.data!.orderCount!.toString());
+          print(snapshot.data!.orderCount!.toString());
+          print(snapshot.data!.orderCount!.toString());
           final List images = snapshot.data!.images ?? [];
           return Column(
             children: [
@@ -106,6 +128,8 @@ class _ProductProfilViewState extends State<ProductProfilView> {
                       createdAt: snapshot.data!.createdAt!.substring(0, 10),
                       description: snapshot.data!.description!,
                       viewCount: snapshot.data!.viewCount!.toString(),
+                      productWeight: snapshot.data!.weight!.toString(),
+                      orderedCount: snapshot.data!.orderCount!.toString(),
                     ),
                     Container(
                       color: Colors.white,
@@ -119,7 +143,14 @@ class _ProductProfilViewState extends State<ProductProfilView> {
                         ],
                       ),
                     ),
-                    listViewName('sameProducts', false, size, () {}),
+                    Container(
+                      color: Colors.white,
+                      padding: const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 15),
+                      child: Text(
+                        'sameProducts'.tr,
+                        style: TextStyle(color: Colors.black, fontSize: size.width >= 800 ? 30 : 22, fontFamily: gilroyBold),
+                      ),
+                    ),
                     GridView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),

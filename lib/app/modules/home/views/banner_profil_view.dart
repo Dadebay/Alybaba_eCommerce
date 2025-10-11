@@ -45,14 +45,6 @@ class BannerProfileView extends GetView {
                 : kPrimaryColor2,
         elevation: 0,
         centerTitle: true,
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: colorController.findMainColor.value == 0
-              ? kPrimaryColor
-              : colorController.findMainColor.value == 1
-                  ? kPrimaryColor1
-                  : kPrimaryColor2,
-          statusBarIconBrightness: Brightness.dark,
-        ),
       ),
       body: Column(
         children: [

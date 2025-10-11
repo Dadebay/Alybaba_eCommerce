@@ -17,6 +17,8 @@ class ProductsService {
     if (lang == 'tr' || lang == 'en') {
       lang = 'tm';
     }
+    print('$serverURL/api/$lang/get-products');
+    print(parametrs);
     final response = await http.get(
       Uri.parse(
         '$serverURL/api/$lang/get-products',
@@ -84,6 +86,7 @@ class ProductsService {
     if (lang == 'tr' || lang == 'en') {
       lang = 'tm';
     }
+    print('$serverURL/api/$lang/get-product/$id');
     final response = await http.get(
       Uri.parse(
         '$serverURL/api/$lang/get-product/$id',

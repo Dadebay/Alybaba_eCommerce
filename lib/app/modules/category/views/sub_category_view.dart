@@ -1,11 +1,13 @@
 // ignore_for_file: file_names
 import 'package:flutter/material.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:get/get.dart';
 import 'package:nabelli_ecommerce/app/constants/constants.dart';
 import 'package:nabelli_ecommerce/app/constants/custom_app_bar.dart';
 import 'package:nabelli_ecommerce/app/constants/loaders/loader_widgets.dart';
 import 'package:nabelli_ecommerce/app/data/models/category_model.dart';
 import 'package:nabelli_ecommerce/app/modules/home/controllers/color_controller.dart';
+import 'package:nabelli_ecommerce/app/modules/search/views/search_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../constants/cards/product_card.dart';
@@ -96,7 +98,15 @@ class _SubCategoryViewState extends State<SubCategoryView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
-      appBar: CustomAppBar(backArrow: true, actionIcon: false, name: widget.categoryName),
+      appBar: CustomAppBar(
+          backArrow: true,
+          actionIcon: true,
+          icon: IconButton(
+              onPressed: () {
+                Get.to(() => SearchView());
+              },
+              icon: Icon(IconlyLight.search, color: Colors.white)),
+          name: widget.categoryName),
       body: Column(
         children: [
           subCategoryView(),

@@ -10,9 +10,9 @@ import 'package:nabelli_ecommerce/app/modules/user_profil/views/user_profil_view
 // String serverURL = 'http://216.250.12.49:5001';
 String serverURL = 'http://alybaba.com.tm';
 const Color kPrimaryColor = Color(0xfffd7e15);
-const Color kPrimaryColor1 = Color(0xff1f2123);
-const Color kPrimaryColor2 = Color(0xff6366f1);
-const Color kPrimaryColor3 = Color(0xff6605ff);
+const Color kPrimaryColor1 = Color(0xffb0cac1);
+const Color kPrimaryColor2 = Color(0xff02283b);
+const Color kPrimaryColor3 = Color(0xffdb9a48);
 const Color backgroundColor = Color(0xfff2f2f2);
 const Color kBlackColor = Color(0xff2b2b2b);
 
@@ -21,7 +21,7 @@ List page = [const HomeView(), const CategoriesView(), const CartView(), const U
 List pageTitle = ['home'.tr, 'category'.tr, 'cart'.tr, 'profil'.tr];
 List icons = [IconlyLight.home, IconlyLight.category, IconlyLight.buy, IconlyLight.profile];
 List iconsBold = [IconlyBold.home, IconlyBold.category, IconlyBold.buy, IconlyBold.profile];
-List iconsAppBar = [homeViewAppBar(), SizedBox.shrink(), DeleteButton(), CallButton()];
+List iconsAppBar = [homeViewAppBar(false), SizedBox.shrink(), DeleteButton(), CallButton()];
 
 ///BorderRadius
 const BorderRadius borderRadius5 = BorderRadius.all(Radius.circular(5));

@@ -7,9 +7,18 @@ class CartPageController extends GetxController {
   RxList list = [].obs;
   RxList cartListToCompare = [].obs;
   final storage = GetStorage();
-  void addToCard({required int id, required String price, required String image, required String name, required String createdAt, required bool airplane, required int sizeID, required int colorID}) {
+  void addToCard(
+      {required int id,
+      required String price,
+      required String image,
+      required String name,
+      required String createdAt,
+      required bool airplane,
+      required int sizeID,
+      required int colorID,
+      required double weight}) {
     if (list.isEmpty) {
-      list.add({'id': id, 'price': price, 'image': image, 'name': name, 'createdAt': createdAt, 'quantity': 1, 'sizeID': sizeID, 'colorID': colorID, 'airplane': airplane});
+      list.add({'id': id, 'price': price, 'image': image, 'name': name, 'createdAt': createdAt, 'quantity': 1, 'sizeID': sizeID, 'colorID': colorID, 'airplane': airplane, 'weight': weight});
     } else {
       bool value = false;
       for (final element in list) {
@@ -19,11 +28,15 @@ class CartPageController extends GetxController {
         }
       }
       if (!value) {
-        list.add({'id': id, 'price': price, 'name': name, 'image': image, 'createdAt': createdAt, 'quantity': 1, 'sizeID': sizeID, 'colorID': colorID, 'airplane': airplane});
+        list.add({'id': id, 'price': price, 'name': name, 'image': image, 'createdAt': createdAt, 'quantity': 1, 'sizeID': sizeID, 'colorID': colorID, 'airplane': airplane, 'weight': weight});
       }
     }
     list.refresh();
     final String jsonString = jsonEncode(list);
+    print(list.last['weight']);
+    print(list.last['weight']);
+    print(list.last['weight']);
+    print(list.last['weight']);
     storage.write('cartList', jsonString);
   }
 
@@ -43,6 +56,7 @@ class CartPageController extends GetxController {
           'sizeID': element['sizeID'],
           'colorID': element['colorID'],
           'airplane': element['airplane'],
+          'weight': element['weight'],
         });
       }
     }

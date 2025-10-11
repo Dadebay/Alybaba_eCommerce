@@ -18,14 +18,24 @@ class TransportModel {
   int? minWeek;
   int? maxWeek;
   int? transport;
+  String? price;
+  String? prepayment;
+  String? info;
+  String? name;
+  String? title;
 
-  TransportModel({this.minWeek, this.maxWeek, this.transport});
+  TransportModel({this.minWeek, this.price, this.prepayment, this.maxWeek, this.info, this.transport, this.name, this.title});
 
   factory TransportModel.fromJson(Map<String, dynamic> json) {
     return TransportModel(
       minWeek: json['min_week'],
+      info: json['info'],
       maxWeek: json['max_week'],
       transport: json['transport'],
+      price: json['price'].toString(),
+      prepayment: json['prepayment'].toString(),
+      name: json['name'],
+      title: json['title'],
     );
   }
 }

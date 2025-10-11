@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:nabelli_ecommerce/app/constants/buttons/change_color_button.dart';
 import 'package:nabelli_ecommerce/app/constants/buttons/change_lang_button.dart';
 import 'package:nabelli_ecommerce/app/constants/custom_app_bar.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constants/buttons/settings_button.dart';
@@ -190,6 +190,9 @@ class _SettingsState extends State<Settings> {
             ),
             ChangeColorButton(
               index: 2,
+            ),
+            ChangeColorButton(
+              index: 3,
             ),
           ],
         ),

@@ -19,10 +19,12 @@ class HomeController extends GetxController {
   late Future<List<BannerModel>> bannersFuture;
   late Future<List<BannerModel>> minibannerFuture;
   late Future<List<ProductModel>> newItemsProducts;
+  late Future<List<ProductModel>> mostOrdered;
   List parameters = [
     {'new_in_come': 'true', 'page': '0', 'limit': '20', 'sort_column': 'random', 'sort_direction': 'DESC'},
     {'recomended': 'true', 'page': '0', 'limit': '20', 'sort_column': 'random', 'sort_direction': 'ASC'},
     {'on_hand': 'true', 'page': '0', 'limit': '20', 'sort_column': 'random', 'sort_direction': 'ASC'},
+    {'ordered_count': 'true', 'page': '0', 'limit': '20', 'sort_column': 'ordered_count', 'sort_direction': 'DESC'},
   ];
 
   //
@@ -31,6 +33,7 @@ class HomeController extends GetxController {
   dynamic getData() {
     minibannerFuture = BannerService().getBanners(3);
     bannersFuture = BannerService().getBanners(2);
+    mostOrdered = ProductsService().getProducts(parametrs: parameters[3]);
     newItemsProducts = ProductsService().getProducts(parametrs: parameters[0]);
     productsFutureRecomended = ProductsService().getProducts(parametrs: parameters[1]);
     productsFutureInOurHands = ProductsService().getProducts(

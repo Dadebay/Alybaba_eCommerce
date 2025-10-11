@@ -1,4 +1,4 @@
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:carousel_slider/carousel_slider.dart' as carousel;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nabelli_ecommerce/app/constants/loaders/loader_widgets.dart';
@@ -36,7 +36,7 @@ class Banners extends StatelessWidget {
         }
         return Column(
           children: [
-            CarouselSlider.builder(
+            carousel.CarouselSlider.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index, count) {
                 return BannerCard(
@@ -44,8 +44,8 @@ class Banners extends StatelessWidget {
                   model: snapshot.data![index],
                 );
               },
-              options: CarouselOptions(
-                onPageChanged: (index, CarouselPageChangedReason a) {
+              options: carousel.CarouselOptions(
+                onPageChanged: (index, carousel.CarouselPageChangedReason a) {
                   homeController.bannerDotsIndex.value = index;
                 },
                 height: sizeValue

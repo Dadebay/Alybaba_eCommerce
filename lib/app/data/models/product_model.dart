@@ -83,6 +83,7 @@ class ProductByIDModel {
   final int? producerId;
   final bool? onHand;
   final String? barcode;
+  final String? orderCount;
   final bool? kargoIncluded;
 
   final int? categoryID;
@@ -100,6 +101,7 @@ class ProductByIDModel {
     this.price,
     this.viewCount,
     this.createdAt,
+    this.orderCount,
     this.barcode,
     this.mainCategoryName,
     this.subCategoryName,
@@ -131,6 +133,7 @@ class ProductByIDModel {
       id: json['id'],
       airPlane: json['airplane'] ?? false,
       weight: json['weight'] ?? '',
+      orderCount: json['ordered_count'] ?? '',
       weightPrice: json['weight_price'] ?? '',
       name: json['name'],
       description: json['description'] ?? '',

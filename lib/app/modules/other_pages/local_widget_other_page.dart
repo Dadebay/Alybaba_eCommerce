@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:carousel_slider/carousel_slider.dart' as carousel;
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nabelli_ecommerce/app/constants/buttons/add_cart_button.dart';
@@ -61,31 +62,31 @@ Container productProfilNamePricePart({
                     ),
                   ],
                 ),
-                dostawkaPrice != ''
-                    ? Row(
-                        children: [
-                          Text(
-                            'forKargo'.tr + ' +' + dostawkaPrice,
-                            style: const TextStyle(
-                              color: Colors.grey,
-                              fontSize: 16,
-                              fontFamily: gilroyMedium,
-                            ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.only(right: 6, top: 3),
-                            child: Text(
-                              ' TMT',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 12,
-                                fontFamily: gilroyMedium,
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    : SizedBox.shrink(),
+                // dostawkaPrice != ''
+                //     ? Row(
+                //         children: [
+                //           Text(
+                //             'forKargo'.tr + ' +' + dostawkaPrice,
+                //             style: const TextStyle(
+                //               color: Colors.grey,
+                //               fontSize: 16,
+                //               fontFamily: gilroyMedium,
+                //             ),
+                //           ),
+                //           const Padding(
+                //             padding: EdgeInsets.only(right: 6, top: 3),
+                //             child: Text(
+                //               ' TMT',
+                //               style: TextStyle(
+                //                 color: Colors.grey,
+                //                 fontSize: 12,
+                //                 fontFamily: gilroyMedium,
+                //               ),
+                //             ),
+                //           ),
+                //         ],
+                //       )
+                //     : SizedBox.shrink(),
               ],
             ),
           ],
@@ -94,12 +95,12 @@ Container productProfilNamePricePart({
           'Barcode : ' + barCode,
           style: const TextStyle(color: Colors.grey, fontFamily: gilroyMedium, fontSize: 18),
         ),
-        kargoIncluded
-            ? Text(
-                'kargoIncluded'.tr,
-                style: const TextStyle(color: Colors.red, fontFamily: gilroySemiBold, fontSize: 19),
-              )
-            : const SizedBox.shrink(),
+        // kargoIncluded
+        //     ? Text(
+        //         'kargoIncluded'.tr,
+        //         style: const TextStyle(color: Colors.red, fontFamily: gilroySemiBold, fontSize: 19),
+        //       )
+        //     : const SizedBox.shrink(),
       ],
     ),
   );
@@ -111,6 +112,8 @@ Container productProfildescriptionPart({
   required String viewCount,
   required String createdAt,
   required String description,
+  required String productWeight,
+  required String orderedCount,
 }) {
   return Container(
     padding: const EdgeInsets.all(15),
@@ -126,8 +129,10 @@ Container productProfildescriptionPart({
             style: const TextStyle(color: Colors.black, fontFamily: gilroySemiBold, fontSize: 21),
           ),
         ),
+        twoText(name1: "${"orderedCount".tr} : ", name2: orderedCount),
         twoText(name1: "${"brandPP".tr} : ", name2: brand),
         twoText(name1: "${"category".tr} :", name2: category),
+        productWeight.isEmpty ? SizedBox.shrink() : twoText(name1: 'productWeight'.tr, name2: productWeight),
         twoText(name1: 'data3'.tr, name2: viewCount),
         twoText(name1: 'createdAt'.tr, name2: createdAt),
         const SizedBox(
@@ -179,7 +184,7 @@ Container imagesView(List<dynamic> images) {
     margin: const EdgeInsets.only(bottom: 15),
     child: images.isEmpty
         ? noBannerImage()
-        : CarouselSlider.builder(
+        : carousel.CarouselSlider.builder(
             itemCount: images.length,
             itemBuilder: (context, index, count) {
               return GestureDetector(
@@ -207,8 +212,8 @@ Container imagesView(List<dynamic> images) {
                 ),
               );
             },
-            options: CarouselOptions(
-              onPageChanged: (index, CarouselPageChangedReason a) {},
+            options: carousel.CarouselOptions(
+              onPageChanged: (index, carousel.CarouselPageChangedReason a) {},
               viewportFraction: 1.0,
               autoPlay: true,
               height: Get.size.height,

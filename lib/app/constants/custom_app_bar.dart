@@ -36,9 +36,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSize {
       elevation: 0,
       scrolledUnderElevation: 0.0,
       centerTitle: true,
-      systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarColor: colorController.mainColor,
-      ),
       leadingWidth: 40,
       leading: backArrow
           ? Padding(

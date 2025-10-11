@@ -85,6 +85,7 @@ class CreateOrderService {
     if (lang == 'tr' || lang == 'en') {
       lang = 'tm';
     }
+    print('$serverURL/api/$lang/get-order-info');
     final response = await http.get(
       Uri.parse(
         '$serverURL/api/$lang/get-order-info',
@@ -93,9 +94,10 @@ class CreateOrderService {
         HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
       },
     );
+    print(response.statusCode);
+    print(response.body);
     if (response.statusCode == 200) {
       final responseJson = json.decode(response.body);
-
       return GetOrderInfoModel.fromJson(responseJson);
     } else {
       return GetOrderInfoModel();

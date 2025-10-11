@@ -9,8 +9,13 @@ class ChangeColorButton extends StatelessWidget {
   ChangeColorButton({required this.index, Key? key}) : super(key: key);
   final ColorController colorController = Get.put(ColorController());
   final int index;
-  List colors = [kPrimaryColor, kPrimaryColor1, kPrimaryColor3];
-  List names = ['appColor2', 'appColor3', 'appColor4'];
+  List colors = [kPrimaryColor, kPrimaryColor1, kPrimaryColor2, kPrimaryColor3];
+  List names = [
+    'appColor2',
+    'appColor3',
+    'appColor4',
+    'appColor5',
+  ];
   @override
   Widget build(BuildContext context) {
     return Wrap(

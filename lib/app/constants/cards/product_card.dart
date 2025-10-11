@@ -144,6 +144,7 @@ class ProductCard extends StatelessWidget {
     );
   }
 
+
   Widget namePart1() {
     double pricee = double.parse(price.toString());
     if (discountValueType == 2) {
@@ -172,6 +173,7 @@ class ProductCard extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(color: Colors.black, fontFamily: gilroyMedium, fontSize: 18),
           ),
+           
         ],
       ),
     );

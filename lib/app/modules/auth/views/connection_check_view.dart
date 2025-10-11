@@ -153,6 +153,20 @@ class _ConnectionCheckViewState extends State {
     );
   }
 
+  Widget logoPart() {
+    return Center(
+      child: ClipRRect(
+        borderRadius: borderRadius30,
+        child: Image.asset(
+          logo,
+          fit: BoxFit.cover,
+          width: 170,
+          height: 170,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -168,9 +182,9 @@ class _ConnectionCheckViewState extends State {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return spinKit();
                 } else if (snapshot.hasError) {
-                  return referalPageError();
+                  return logoPart();
                 } else if (snapshot.data!.isEmpty) {
-                  return referalPageEmptyData();
+                  return logoPart();
                 }
                 final Random rand = Random();
                 final int random = rand.nextInt(snapshot.data!.length);
@@ -195,21 +209,20 @@ class _ConnectionCheckViewState extends State {
                     }
                   },
                   child: CachedNetworkImage(
-                    fadeInCurve: Curves.ease,
-                    imageUrl: '$serverURL/${snapshot.data![random].destination!}-mini.webp',
-                    imageBuilder: (context, imageProvider) => Container(
-                      width: size.width,
-                      decoration: BoxDecoration(
-                        borderRadius: borderRadius10,
-                        image: DecorationImage(
-                          image: imageProvider,
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ),
-                    placeholder: (context, url) => spinKit(),
-                    errorWidget: (context, url, error) => noBannerImage(),
-                  ),
+                      fadeInCurve: Curves.ease,
+                      imageUrl: '$serverURL/${snapshot.data![random].destination!}-mini.webp',
+                      imageBuilder: (context, imageProvider) => Container(
+                            width: size.width,
+                            decoration: BoxDecoration(
+                              borderRadius: borderRadius10,
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          ),
+                      placeholder: (context, url) => spinKit(),
+                      errorWidget: (context, url, error) => logoPart()),
                 );
               },
             ),

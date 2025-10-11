@@ -9,6 +9,8 @@ import 'package:nabelli_ecommerce/app/constants/widgets.dart';
 import 'package:nabelli_ecommerce/app/data/services/abous_us_service.dart';
 import 'package:nabelli_ecommerce/app/data/services/create_order_service.dart';
 
+import 'package:nabelli_ecommerce/app/modules/cart_page/views/order_success_view.dart';
+
 import '../../../constants/text_fields/custom_text_field.dart';
 import '../../../constants/text_fields/phone_number.dart';
 import '../../../data/models/get_order_info_model.dart';
@@ -18,9 +20,10 @@ import '../controllers/cart_page_controller.dart';
 class OrderPage extends StatefulWidget {
   const OrderPage({
     required this.airPlane,
+    required this.finalPrice,
     Key? key,
   }) : super(key: key);
-
+  final String finalPrice;
   final bool airPlane;
 
   @override
@@ -29,24 +32,24 @@ class OrderPage extends StatefulWidget {
 
 enum PaymentMethod { cash, creditCard }
 
-enum OrderType { train, plain, container }
-
 class _OrderPageState extends State<OrderPage> {
   final TextEditingController addressController = TextEditingController();
-  final CartPageController cartController = Get.put(CartPageController());
+  final CartPageController cartController = Get.find<CartPageController>();
   final TextEditingController cityController = TextEditingController();
-  final HomeController homeController = Get.put(HomeController());
+  final HomeController homeController = Get.find<HomeController>();
   String name = 'Asgabat';
   final FocusNode orderAdressFocusNode = FocusNode();
   late final Future<GetOrderInfoModel> orderModel;
   final FocusNode orderPhoneNumber = FocusNode();
-  OrderType orderType = OrderType.train;
-  int orderTypeNum = 1;
+  TransportModel? selectedTransport;
+  int orderTypeNum = 3;
   final FocusNode orderUserName = FocusNode();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController userNameController = TextEditingController();
 
   final _orderPage = GlobalKey<FormState>();
+  double sumPriceAdded = 0.0;
+  double sumWeight = 0.0;
 
   @override
   void initState() {
@@ -54,6 +57,31 @@ class _OrderPageState extends State<OrderPage> {
     userNameController.clear();
     phoneController.clear();
     orderModel = CreateOrderService().getOrderInfo();
+    cartController.list.forEach((element) {
+      String a = element['weight'].toString().isEmpty
+          ? '0.0'
+          : element['weight'].toString() == 'null'
+              ? '0.0'
+              : element['weight'].toString();
+      sumWeight += double.parse(a);
+    });
+    _calculateInitialTransportPrice();
+  }
+
+  void _calculateInitialTransportPrice() {
+    orderModel.then((data) {
+      if (mounted && data.transports != null && data.transports!.isNotEmpty) {
+        setState(() {
+          // Set the default selected transport to the first one in the list
+          selectedTransport = data.transports!.firstWhere((element) => element.transport == 3, orElse: () => data.transports!.first);
+          orderTypeNum = selectedTransport!.transport!;
+          sumPriceAdded = sumWeight * double.parse(selectedTransport!.price ?? '0');
+        });
+      }
+    }).catchError((error) {
+      // Handle potential errors from the future
+      print("Error calculating initial price: $error");
+    });
   }
 
   Container userInfo() {
@@ -101,9 +129,6 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   Widget orderTypeWidget(GetOrderInfoModel model) {
-    final bool showDate = int.parse(model.transports![0].maxWeek.toString()) > 10;
-    final bool showDate1 = int.parse(model.transports![1].maxWeek.toString()) > 10;
-    final bool showDate2 = int.parse(model.transports![2].maxWeek.toString()) > 10;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -114,81 +139,35 @@ class _OrderPageState extends State<OrderPage> {
             style: const TextStyle(color: Colors.black, fontFamily: gilroySemiBold, fontSize: 20),
           ),
         ),
-        model.transports![0].minWeek == 0 && model.transports![0].maxWeek == 0
-            ? const SizedBox.shrink()
-            : RadioListTile<OrderType>(
-                contentPadding: EdgeInsets.zero,
-                value: OrderType.train,
-                groupValue: orderType,
-                onChanged: (OrderType? value) {
-                  setState(() {
-                    orderType = value!;
-                    orderTypeNum = 1;
-                  });
-                },
-                activeColor: colorController.mainColor,
-                title: Text(
-                  'plain'.tr,
-                  style: const TextStyle(color: Colors.black, fontFamily: gilroyMedium),
-                ),
-                subtitle: Text(
-                  showDate
-                      ? '${'orderComesThatDayTitle'.tr} ${model.transports![0].minWeek.toString().substring(0, 1)}-${model.transports![0].maxWeek.toString().substring(0, 1)} ${'orderComesThatDaySubtitleDAILY'.tr}'
-                      : '${'orderComesThatDayTitle'.tr} ${model.transports![0].minWeek}-${model.transports![0].maxWeek} ${'orderComesThatDaySubtitle'.tr}',
-                  style: const TextStyle(color: Colors.black54, fontFamily: gilroyRegular),
-                ),
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: model.transports!.length,
+          itemBuilder: (context, index) {
+            final transport = model.transports![index];
+            return RadioListTile<TransportModel>(
+              contentPadding: EdgeInsets.zero,
+              value: transport,
+              groupValue: selectedTransport,
+              onChanged: (TransportModel? value) {
+                setState(() {
+                  selectedTransport = value!;
+                  orderTypeNum = selectedTransport!.transport!;
+                  sumPriceAdded = sumWeight * double.parse(selectedTransport!.price ?? '0');
+                });
+              },
+              activeColor: colorController.mainColor,
+              title: Text(
+                transport.title!,
+                style: const TextStyle(color: Colors.black, fontFamily: gilroyMedium),
               ),
-        model.transports![1].minWeek == 0 && model.transports![1].maxWeek == 0
-            ? const SizedBox.shrink()
-            : Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: RadioListTile<OrderType>(
-                  contentPadding: EdgeInsets.zero,
-                  value: OrderType.plain,
-                  groupValue: orderType,
-                  onChanged: (OrderType? value) {
-                    setState(() {
-                      orderType = value!;
-                      orderTypeNum = 2;
-                    });
-                  },
-                  activeColor: colorController.mainColor,
-                  title: Text(
-                    'train'.tr,
-                    style: const TextStyle(color: Colors.black, fontFamily: gilroyMedium),
-                  ),
-                  subtitle: Text(
-                    showDate1
-                        ? '${'orderComesThatDayTitle'.tr} ${model.transports![1].minWeek.toString().substring(0, 1)}-${model.transports![1].maxWeek.toString().substring(0, 1)} ${'orderComesThatDaySubtitleDAILY'.tr}'
-                        : '${'orderComesThatDayTitle'.tr} ${model.transports![1].minWeek}-${model.transports![1].maxWeek} ${'orderComesThatDaySubtitle'.tr}',
-                    style: const TextStyle(color: Colors.black54, fontFamily: gilroyRegular),
-                  ),
-                ),
+              subtitle: Text(
+                transport.info!,
+                style: const TextStyle(color: Colors.black54, fontFamily: gilroyRegular),
               ),
-        model.transports![2].minWeek == 0 && model.transports![2].maxWeek == 0
-            ? const SizedBox.shrink()
-            : RadioListTile<OrderType>(
-                contentPadding: EdgeInsets.zero,
-                value: OrderType.container,
-                groupValue: orderType,
-                onChanged: (OrderType? value) {
-                  setState(() {
-                    orderType = value!;
-                    orderTypeNum = 3;
-                  });
-                },
-                activeColor: colorController.mainColor,
-                title: Text(
-                  'container'.tr,
-                  style: const TextStyle(color: Colors.black, fontFamily: gilroyMedium),
-                ),
-                subtitle: Text(
-                  showDate2
-                      ? '${'orderComesThatDayTitle'.tr} ${model.transports![2].minWeek.toString().substring(0, 1)}-${model.transports![2].maxWeek.toString().substring(0, 1)} ${'orderComesThatDaySubtitleDAILY'.tr}'
-                      : '${'orderComesThatDayTitle'.tr} ${model.transports![2].minWeek}-${model.transports![2].maxWeek} ${'orderComesThatDaySubtitle'.tr}',
-                  style: const TextStyle(color: Colors.black54, fontFamily: gilroyRegular),
-                ),
-              ),
+            );
+          },
+        ),
       ],
     );
   }
@@ -243,51 +222,78 @@ class _OrderPageState extends State<OrderPage> {
 
   @override
   Widget build(BuildContext context) {
+    double price = double.parse(widget.finalPrice.toString()) + sumPriceAdded;
     return Scaffold(
       backgroundColor: backgroundColor,
+      // extendBody: true,
+      resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
         backArrow: true,
         actionIcon: false,
         name: 'orders',
       ),
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
+      floatingActionButton: Align(
+        alignment: Alignment.bottomCenter,
+        child: Container(
+          height: 70,
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: AgreeButton(
+            text: "orderMe".tr + " ${price.toStringAsFixed(2)} TMT",
+            onTap: () {
+              if (_orderPage.currentState!.validate()) {
+                homeController.agreeButton.value = !homeController.agreeButton.value;
+                CreateOrderService()
+                    .createOrder(userName: userNameController.text, userPhoneNumber: phoneController.text, address: '$name + ${addressController.text}', note: '', transport: orderTypeNum)
+                    .then((value) {
+                  if (value == 200) {
+                    cartController.cartListToCompare.clear();
+                    cartController.removeAllCartElements();
+                    homeController.agreeButton.value = !homeController.agreeButton.value;
+                    Get.off(() => const OrderSuccessView());
+                  } else {
+                    showSnackBar('errorTitle'.tr + '$value', 'error', Colors.red);
+                    homeController.agreeButton.value = !homeController.agreeButton.value;
+                  }
+                });
+              } else {
+                showSnackBar('noConnection3', 'errorEmpty', Colors.red);
+              }
+            },
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
       body: Form(
         key: _orderPage,
         child: ListView(
           padding: const EdgeInsets.all(15.0),
           children: [
             userInfo(),
+            Container(
+              padding: EdgeInsets.all(10),
+              margin: EdgeInsets.symmetric(vertical: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: borderRadius10,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "orderKG".tr + "${sumWeight.toString() == '0.0' ? "" : " : ${sumWeight} KG"}",
+                    style: TextStyle(color: Colors.black, fontFamily: gilroyBold, fontSize: 18),
+                  ),
+                  Text(
+                    "orderKGSubtitle".tr,
+                    style: TextStyle(color: Colors.grey, fontFamily: gilroyRegular, fontSize: 14),
+                  ),
+                ],
+              ),
+            ),
             orderInfowidget(),
             const SizedBox(
-              height: 40,
-            ),
-            AgreeButton(
-              onTap: () {
-                if (_orderPage.currentState!.validate()) {
-                  homeController.agreeButton.value = !homeController.agreeButton.value;
-                  CreateOrderService()
-                      .createOrder(
-                    userName: userNameController.text,
-                    userPhoneNumber: phoneController.text,
-                    address: '$name + ${addressController.text}',
-                    note: '',
-                    transport: orderTypeNum,
-                  )
-                      .then((value) {
-                    if (value == 200) {
-                      Get.back();
-                      cartController.cartListToCompare.clear();
-                      cartController.removeAllCartElements();
-                      showSnackBar('orderComplete', 'orderCompletedTrue', Colors.green);
-                      homeController.agreeButton.value = !homeController.agreeButton.value;
-                    } else {
-                      showSnackBar('errorTitle'.tr + '$value', 'error', Colors.red);
-                      homeController.agreeButton.value = !homeController.agreeButton.value;
-                    }
-                  });
-                } else {
-                  showSnackBar('noConnection3', 'errorEmpty', Colors.red);
-                }
-              },
+              height: 100,
             ),
           ],
         ),
@@ -306,6 +312,7 @@ class _OrderPageState extends State<OrderPage> {
         } else if (snapshot.hasError) {
           return const Text('Error');
         }
+
         return ListView(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),

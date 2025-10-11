@@ -10,7 +10,7 @@ class BannerService {
   Future<List<BannerModel>> getBanners(int id) async {
     final List<BannerModel> bannerList = [];
     String lang = Get.locale!.languageCode;
-      if (lang == 'tr' || lang == 'en') {
+    if (lang == 'tr' || lang == 'en') {
       lang = 'tm';
     }
     final response = await http.get(
@@ -21,6 +21,9 @@ class BannerService {
         HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
       },
     );
+    print('$serverURL/api/$lang/get-banners/$id');
+    print(response.body);
+    print(response.statusCode);
     if (response.statusCode == 200) {
       final responseJson = jsonDecode(response.body)['rows'] as List;
       for (final Map product in responseJson) {

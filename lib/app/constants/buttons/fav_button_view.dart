@@ -6,7 +6,15 @@ import 'package:nabelli_ecommerce/app/constants/constants.dart';
 import '../../modules/user_profil/controllers/favorites_page_controller.dart';
 
 class FavButton extends StatefulWidget {
-  const FavButton({ required this.whiteColor, required this.id, required this.createdAt, required this.name, required this.price, required this.image,Key? key,}) : super(key: key);
+  const FavButton({
+    required this.whiteColor,
+    required this.id,
+    required this.createdAt,
+    required this.name,
+    required this.price,
+    required this.image,
+    Key? key,
+  }) : super(key: key);
   final bool whiteColor;
   final int id;
   final String name;
@@ -50,10 +58,26 @@ class _FavButtonState extends State<FavButton> {
         },
         child: Container(
           padding: const EdgeInsets.all(6),
-          decoration: BoxDecoration(borderRadius: borderRadius10, color: widget.whiteColor ? Colors.white : Colors.white.withOpacity(0.4), boxShadow: widget.whiteColor ? [] : [BoxShadow(color: Colors.grey.withOpacity(0.3), spreadRadius: 0.5, blurRadius: 5)]),
+          decoration: BoxDecoration(
+            borderRadius: borderRadius10,
+            color: widget.whiteColor ? Colors.white : Colors.transparent,
+            // boxShadow: widget.whiteColor
+            //     ? []
+            //     : [
+            //         BoxShadow(
+            //           color: Colors.grey.withOpacity(0.3),
+            //           spreadRadius: 0.5,
+            //           blurRadius: 5,
+            //         ),
+            //       ],
+          ),
           child: Icon(
             value ? IconlyBold.heart : IconlyBroken.heart,
-            color: value ? Colors.red : Colors.black,
+            color: value
+                ? Colors.red
+                : widget.whiteColor
+                    ? Colors.black
+                    : Colors.white,
             size: 26,
           ),
         ),

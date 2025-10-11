@@ -9,9 +9,10 @@ import '../../modules/home/controllers/color_controller.dart';
 
 class AgreeButton extends StatelessWidget {
   final Function() onTap;
-
+  final String? text;
   AgreeButton({
     required this.onTap,
+    this.text,
     Key? key,
   }) : super(key: key);
   final HomeController homeController = Get.put(HomeController());
@@ -45,7 +46,7 @@ class AgreeButton extends StatelessWidget {
                 ),
               )
             : Text(
-                'agree'.tr,
+                text ?? 'agree'.tr,
                 textAlign: TextAlign.center,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,

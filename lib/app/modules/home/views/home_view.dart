@@ -4,6 +4,7 @@ import 'package:nabelli_ecommerce/app/constants/cards/product_card.dart';
 import 'package:nabelli_ecommerce/app/constants/constants.dart';
 import 'package:nabelli_ecommerce/app/constants/loaders/loader_widgets.dart';
 import 'package:nabelli_ecommerce/app/data/models/product_model.dart';
+import 'package:nabelli_ecommerce/app/data/services/banner_service.dart';
 import 'package:nabelli_ecommerce/app/modules/home/views/banners.dart';
 import 'package:nabelli_ecommerce/app/modules/other_pages/show_all_products.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -19,7 +20,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  List pageName = ['newItems', 'inOurHands', 'recomendedItems'];
+  List pageName = ['newItems', 'inOurHands', 'recomendedItems', 'mostOrdered'];
   final HomeController homeController = Get.put(HomeController());
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
   void _onRefresh() async {
@@ -27,6 +28,12 @@ class _HomeViewState extends State<HomeView> {
     _refreshController.refreshCompleted();
     homeController.getData();
     setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    BannerService().getBanners(3);
   }
 
   final ColorController colorController2 = Get.put(ColorController());
@@ -55,6 +62,7 @@ class _HomeViewState extends State<HomeView> {
             future: homeController.minibannerFuture,
             miniBanner: true,
           ),
+          products(size: size, index: 3, future: homeController.mostOrdered),
           products(size: size, index: 0, future: homeController.newItemsProducts),
           products(size: size, index: 1, future: homeController.productsFutureRecomended),
           products(size: size, index: 2, future: homeController.productsFutureInOurHands),
@@ -71,6 +79,9 @@ class _HomeViewState extends State<HomeView> {
     required int index,
     required Future<List<ProductModel>> future,
   }) {
+    if (index >= pageName.length || index >= homeController.parameters.length) {
+      return const SizedBox.shrink();
+    }
     return Wrap(
       children: [
         listViewName(pageName[index], true, size, () {
