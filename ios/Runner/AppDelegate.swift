@@ -1,6 +1,7 @@
 import UIKit
 import Flutter
 import FirebaseCore
+import flutter_local_notifications
 import FirebaseMessaging
 
 @UIApplicationMain

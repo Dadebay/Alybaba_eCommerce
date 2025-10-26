@@ -58,12 +58,15 @@ class _HomeViewState extends State<HomeView> {
             future: homeController.bannersFuture,
             miniBanner: false,
           ),
-          Banners(
-            future: homeController.minibannerFuture,
-            miniBanner: true,
-          ),
           products(size: size, index: 3, future: homeController.mostOrdered),
           products(size: size, index: 0, future: homeController.newItemsProducts),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Banners(
+              future: homeController.minibannerFuture,
+              miniBanner: true,
+            ),
+          ),
           products(size: size, index: 1, future: homeController.productsFutureRecomended),
           products(size: size, index: 2, future: homeController.productsFutureInOurHands),
           const SizedBox(

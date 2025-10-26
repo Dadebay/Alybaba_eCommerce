@@ -182,18 +182,10 @@ class _SettingsState extends State<Settings> {
                 ),
               ],
             ),
-            ChangeColorButton(
-              index: 0,
-            ),
-            ChangeColorButton(
-              index: 1,
-            ),
-            ChangeColorButton(
-              index: 2,
-            ),
-            ChangeColorButton(
-              index: 3,
-            ),
+            ChangeColorButton(index: 0),
+            ChangeColorButton(index: 1),
+            ChangeColorButton(index: 2),
+            ChangeColorButton(index: 3),
           ],
         ),
       ),
