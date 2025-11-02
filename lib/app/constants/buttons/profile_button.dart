@@ -22,6 +22,9 @@ class ProfilButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: onTap,
+      splashColor: Colors.transparent,
+      hoverColor: Colors.transparent,
+      selectedTileColor: Colors.transparent,
       minVerticalPadding: 23,
       title: Text(
         name.tr,

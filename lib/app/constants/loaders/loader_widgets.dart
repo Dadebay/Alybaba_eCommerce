@@ -1,8 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart' as carousel;
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../constants.dart';
 
@@ -27,7 +26,19 @@ dynamic miniBannerLoader() {
 }
 
 dynamic spinKit() {
-  return Center(child: Lottie.asset('assets/lottie/loadd.json', animate: true, width: 150, height: 150));
+  return Center(
+    child: Shimmer.fromColors(
+      baseColor: Colors.grey,
+      highlightColor: kPrimaryColor,
+      child: const Text(
+        'Alybaba',
+        style: TextStyle(
+          fontSize: 32.0,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
+  );
 }
 
 Widget loaderBanner() {
@@ -90,7 +101,7 @@ Widget loaderShowAllProducts() {
     itemBuilder: (context, index) => Container(
       decoration: BoxDecoration(
         borderRadius: borderRadius20,
-        color: Colors.grey.withOpacity(0.3),
+        color: Colors.white.withOpacity(0.9),
       ),
       margin: const EdgeInsets.all(10),
       child: spinKit(),

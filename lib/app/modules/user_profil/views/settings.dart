@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:nabelli_ecommerce/app/constants/buttons/change_color_button.dart';
 import 'package:nabelli_ecommerce/app/constants/buttons/change_lang_button.dart';
 import 'package:nabelli_ecommerce/app/constants/custom_app_bar.dart';
+import 'package:nabelli_ecommerce/app/constants/widgets.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -31,88 +32,94 @@ class _SettingsState extends State<Settings> {
         : Get.locale!.toLanguageTag() == 'ru'
             ? 'Rus dili'
             : 'Iňlis dili';
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: CustomAppBar(backArrow: true, actionIcon: false, name: 'settings'),
-      body: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          SettingButton(
-            name: lang,
-            onTap: () {
-              changeLanguage();
-            },
-            icon: Container(
-              width: 35,
-              height: 35,
-              decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.red),
-              child: ClipRRect(
-                borderRadius: borderRadius30,
-                child: Image.asset(
-                  Get.locale!.toLanguageTag() == 'tm'
-                      ? tmIcon
-                      : Get.locale!.toLanguageTag() == 'ru'
-                          ? ruIcon
-                          : engIcon,
-                  fit: BoxFit.cover,
+    return Stack(
+      children: [
+        backgroundWidget(),
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: CustomAppBar(backArrow: true, actionIcon: false, name: 'settings'),
+          body: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              SettingButton(
+                name: lang,
+                onTap: () {
+                  changeLanguage();
+                },
+                icon: Container(
+                  width: 35,
+                  height: 35,
+                  decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.red),
+                  child: ClipRRect(
+                    borderRadius: borderRadius30,
+                    child: Image.asset(
+                      Get.locale!.toLanguageTag() == 'tm'
+                          ? tmIcon
+                          : Get.locale!.toLanguageTag() == 'ru'
+                              ? ruIcon
+                              : engIcon,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          SettingButton(
-            name: 'versia',
-            onTap: () {},
-            icon: Text(
-              '2.0.0',
-              style: TextStyle(
-                fontSize: 18,
-                color: colorController.mainColor,
-                fontFamily: gilroyMedium,
+              SettingButton(
+                name: 'versia',
+                onTap: () {},
+                icon: Text(
+                  '2.0.0',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black,
+                    fontFamily: gilroyMedium,
+                  ),
+                ),
               ),
-            ),
-          ),
-          SettingButton(
-            name: 'appColor',
-            onTap: () {
-              changeColor();
-            },
-            icon: Container(
-              width: 35,
-              height: 35,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: colorController.mainColor,
+              SettingButton(
+                name: 'appColor',
+                onTap: () {
+                  changeColor();
+                },
+                icon: Container(
+                  width: 35,
+                  height: 35,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: colorController.mainColor,
+                    border: Border.all(color: Colors.white),
+                  ),
+                ),
               ),
-            ),
-          ),
-          SettingButton(
-            name: 'share',
-            onTap: () {
-              Share.share(appShareLink, subject: appName);
-            },
-            icon: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                IconlyBroken.arrowRightCircle,
-                color: Colors.black,
+              SettingButton(
+                name: 'share',
+                onTap: () {
+                  Share.share(appShareLink, subject: appName);
+                },
+                icon: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    IconlyBroken.arrowRightCircle,
+                    color: Colors.black,
+                  ),
+                ),
               ),
-            ),
-          ),
-          SettingButton(
-            name: 'giveLike',
-            onTap: () {
-              launchURL(appShareLink);
-            },
-            icon: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                IconlyBroken.arrowRightCircle,
-                color: Colors.black,
+              SettingButton(
+                name: 'giveLike',
+                onTap: () {
+                  launchURL(appShareLink);
+                },
+                icon: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    IconlyBroken.arrowRightCircle,
+                    color: Colors.black,
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

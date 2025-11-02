@@ -43,9 +43,14 @@ class CreateOrderService {
         list.add(element['id']);
       }
     }
-    String lang = Get.locale!.languageCode;
-    if (lang == 'tr' || lang == 'en') {
+    String lang = '';
+
+    if (Get.locale!.languageCode == 'en') {
+      lang = 'ru';
+    } else if (Get.locale!.languageCode == 'tr') {
       lang = 'tm';
+    } else {
+      lang = Get.locale!.languageCode;
     }
     final List<ProductModel> productsList = [];
     final response = await http.get(
@@ -81,9 +86,14 @@ class CreateOrderService {
   }
 
   Future<GetOrderInfoModel> getOrderInfo() async {
-    String lang = Get.locale!.languageCode;
-    if (lang == 'tr' || lang == 'en') {
+    String lang = '';
+
+    if (Get.locale!.languageCode == 'en') {
+      lang = 'ru';
+    } else if (Get.locale!.languageCode == 'tr') {
       lang = 'tm';
+    } else {
+      lang = Get.locale!.languageCode;
     }
     print('$serverURL/api/$lang/get-order-info');
     final response = await http.get(
@@ -94,8 +104,6 @@ class CreateOrderService {
         HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
       },
     );
-    print(response.statusCode);
-    print(response.body);
     if (response.statusCode == 200) {
       final responseJson = json.decode(response.body);
       return GetOrderInfoModel.fromJson(responseJson);

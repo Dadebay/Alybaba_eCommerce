@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nabelli_ecommerce/app/constants/custom_app_bar.dart';
+import 'package:nabelli_ecommerce/app/constants/widgets.dart';
 import 'package:nabelli_ecommerce/app/data/models/message_model.dart';
 import 'package:nabelli_ecommerce/app/data/services/chat_service.dart';
 
@@ -80,35 +81,41 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        backArrow: true,
-        actionIcon: false,
-        name: 'chat'.tr,
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: _isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : _messagesList.isEmpty
-                    ? Center(child: Text('no_messages_yet'.tr))
-                    : ListView.builder(
-                        padding: const EdgeInsets.all(10.0),
-                        itemCount: _messagesList.length,
-                        itemBuilder: (context, index) {
-                          final message = _messagesList[index];
-                          final bool isMe = message.sender == 'user';
-                          return ChatBubble(
-                            message: message.message,
-                            isMe: isMe,
-                          );
-                        },
-                      ),
+    return Stack(
+      children: [
+        backgroundWidget(),
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: CustomAppBar(
+            backArrow: true,
+            actionIcon: false,
+            name: 'chat'.tr,
           ),
-          _buildMessageComposer(),
-        ],
-      ),
+          body: Column(
+            children: [
+              Expanded(
+                child: _isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : _messagesList.isEmpty
+                        ? Center(child: Text('no_messages_yet'.tr))
+                        : ListView.builder(
+                            padding: const EdgeInsets.all(10.0),
+                            itemCount: _messagesList.length,
+                            itemBuilder: (context, index) {
+                              final message = _messagesList[index];
+                              final bool isMe = message.sender == 'user';
+                              return ChatBubble(
+                                message: message.message,
+                                isMe: isMe,
+                              );
+                            },
+                          ),
+              ),
+              _buildMessageComposer(),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -167,7 +174,7 @@ class ChatBubble extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
         padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
-          color: isMe ? Theme.of(context).primaryColor.withOpacity(0.8) : Colors.grey[300],
+          color: isMe ? Colors.black : Colors.white,
           borderRadius: isMe
               ? const BorderRadius.only(
                   topLeft: Radius.circular(15.0),
@@ -182,7 +189,7 @@ class ChatBubble extends StatelessWidget {
         ),
         child: Text(
           message,
-          style: TextStyle(fontSize: 16.0, color: isMe ? Colors.white : Colors.black),
+          style: TextStyle(fontSize: 16.0, color: isMe ? Colors.white : Colors.black, fontWeight: FontWeight.bold),
         ),
       ),
     );

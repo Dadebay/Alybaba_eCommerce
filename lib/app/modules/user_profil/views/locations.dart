@@ -32,73 +32,78 @@ class _LocationsState extends State<Locations> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      appBar: CustomAppBar(
-        backArrow: true,
-        actionIcon: userProfilController.userAddressesList.isEmpty ? false : true,
-        icon: userProfilController.userAddressesList.isEmpty
-            ? const SizedBox.shrink()
-            : IconButton(
-                onPressed: () {
-                  customDialogToUse(
-                    title: 'deleteAddress',
-                    subtitle: 'deleteAddressTitle',
-                    changeColor: false,
-                    onAgree: () {
-                      Get.back();
-                      userProfilController.clearUserAddresses();
-                      showSnackBar('orderDeleted', 'ordersDeleted', Colors.red);
+    return Stack(
+      children: [
+        backgroundWidget(),
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: CustomAppBar(
+            backArrow: true,
+            actionIcon: userProfilController.userAddressesList.isEmpty ? false : true,
+            icon: userProfilController.userAddressesList.isEmpty
+                ? const SizedBox.shrink()
+                : IconButton(
+                    onPressed: () {
+                      customDialogToUse(
+                        title: 'deleteAddress',
+                        subtitle: 'deleteAddressTitle',
+                        changeColor: false,
+                        onAgree: () {
+                          Get.back();
+                          userProfilController.clearUserAddresses();
+                          showSnackBar('orderDeleted', 'ordersDeleted', Colors.red);
+                        },
+                      );
                     },
-                  );
+                    icon: const Icon(
+                      IconlyLight.delete,
+                      color: Colors.white,
+                    ),
+                  ),
+            name: 'locations',
+          ),
+          body: Column(
+            children: [
+              Expanded(
+                child: Obx(() {
+                  return userProfilController.userAddressesList.isEmpty ? locationPageError() : showingLocations();
+                }),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  textEditingControllerNote.clear();
+                  textEditingControllerAddress.clear();
+                  addAddressDialog();
                 },
-                icon: const Icon(
-                  IconlyLight.delete,
-                  color: Colors.white,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: colorController.mainColor,
+                  shape: const RoundedRectangleBorder(borderRadius: borderRadius10),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      CupertinoIcons.add_circled,
+                      color: Colors.white,
+                      size: 24,
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Text(
+                      'addAddress'.tr,
+                      style: const TextStyle(color: Colors.white, fontFamily: gilroySemiBold, fontSize: 18),
+                    ),
+                  ],
                 ),
               ),
-        name: 'locations',
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Obx(() {
-              return userProfilController.userAddressesList.isEmpty ? locationPageError() : showingLocations();
-            }),
+              const SizedBox(
+                height: 15,
+              ),
+            ],
           ),
-          ElevatedButton(
-            onPressed: () {
-              textEditingControllerNote.clear();
-              textEditingControllerAddress.clear();
-              addAddressDialog();
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: colorController.mainColor,
-              shape: const RoundedRectangleBorder(borderRadius: borderRadius10),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  CupertinoIcons.add_circled,
-                  color: Colors.white,
-                  size: 24,
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                Text(
-                  'addAddress'.tr,
-                  style: const TextStyle(color: Colors.white, fontFamily: gilroySemiBold, fontSize: 18),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

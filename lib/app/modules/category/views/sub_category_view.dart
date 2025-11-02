@@ -1,4 +1,6 @@
 // ignore_for_file: file_names
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:get/get.dart';
@@ -94,65 +96,97 @@ class _SubCategoryViewState extends State<SubCategoryView> {
     await ProductsService().getShowAllProducts(parametrs: parametrs);
   }
 
+  String returnImage() {
+    if (colorController.findMainColor.value == 0) {
+      return 'assets/image/color1.png';
+    } else if (colorController.findMainColor.value == 1) {
+      return 'assets/image/color21.png';
+    } else if (colorController.findMainColor.value == 2) {
+      return 'assets/image/color31.png';
+    }
+    return 'assets/image/color41.png';
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      appBar: CustomAppBar(
-          backArrow: true,
-          actionIcon: true,
-          icon: IconButton(
+    return Stack(
+      children: [
+        Stack(
+          fit: StackFit.expand,
+          children: [
+            Image.asset(
+              returnImage(),
+              fit: BoxFit.cover,
+            ),
+            BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6), // blur seviyesi
+              child: Container(
+                color: colorController.mainColor.withOpacity(0.1),
+              ),
+            ),
+          ],
+        ),
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: CustomAppBar(
+            backArrow: true,
+            actionIcon: true,
+            icon: IconButton(
               onPressed: () {
                 Get.to(() => SearchView());
               },
-              icon: Icon(IconlyLight.search, color: Colors.white)),
-          name: widget.categoryName),
-      body: Column(
-        children: [
-          subCategoryView(),
-          Expanded(
-            child: SmartRefresher(
-              footer: footer(),
-              controller: _refreshController,
-              onRefresh: _onRefresh,
-              onLoading: _onLoading,
-              enablePullDown: true,
-              enablePullUp: true,
-              physics: const BouncingScrollPhysics(),
-              header: MaterialClassicHeader(
-                color: colorController.mainColor,
-              ),
-              child: Obx(() {
-                if (homeController.loading.value == 0) {
-                  return loaderShowAllProducts();
-                } else if (homeController.loading.value == 1) {
-                  return referalPageError();
-                } else if (homeController.loading.value == 2) {
-                  return referalPageEmptyData();
-                } else if (homeController.showAllList.isEmpty && homeController.loading.value == 3) {
-                  return referalPageEmptyData();
-                }
-                return GridView.builder(
-                  itemCount: homeController.showAllList.length,
-                  shrinkWrap: true,
-                  physics: const BouncingScrollPhysics(),
-                  itemBuilder: (context, index) => ProductCard(
-                    id: homeController.showAllList[index]['id'],
-                    historyOrder: false,
-                    discountValue: int.parse(homeController.showAllList[index]['discountValue'].toString()),
-                    discountValueType: int.parse(homeController.showAllList[index]['discountValueType'].toString()),
-                    createdAt: homeController.showAllList[index]['createdAt'],
-                    image: "$serverURL/${homeController.showAllList[index]['image']}-mini.webp",
-                    name: homeController.showAllList[index]['name'],
-                    price: homeController.showAllList[index]['price'],
-                  ),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 3 / 5),
-                );
-              }),
+              icon: Icon(IconlyLight.search, color: Colors.white),
             ),
+            name: widget.categoryName,
           ),
-        ],
-      ),
+          body: Column(
+            children: [
+              subCategoryView(),
+              Expanded(
+                child: SmartRefresher(
+                  footer: footer(),
+                  controller: _refreshController,
+                  onRefresh: _onRefresh,
+                  onLoading: _onLoading,
+                  enablePullDown: true,
+                  enablePullUp: true,
+                  physics: const BouncingScrollPhysics(),
+                  header: MaterialClassicHeader(
+                    color: colorController.mainColor,
+                  ),
+                  child: Obx(() {
+                    if (homeController.loading.value == 0) {
+                      return loaderShowAllProducts();
+                    } else if (homeController.loading.value == 1) {
+                      return referalPageError();
+                    } else if (homeController.loading.value == 2) {
+                      return referalPageEmptyData();
+                    } else if (homeController.showAllList.isEmpty && homeController.loading.value == 3) {
+                      return referalPageEmptyData();
+                    }
+                    return GridView.builder(
+                      itemCount: homeController.showAllList.length,
+                      shrinkWrap: true,
+                      physics: const BouncingScrollPhysics(),
+                      itemBuilder: (context, index) => ProductCard(
+                        id: homeController.showAllList[index]['id'],
+                        historyOrder: false,
+                        discountValue: int.parse(homeController.showAllList[index]['discountValue'].toString()),
+                        discountValueType: int.parse(homeController.showAllList[index]['discountValueType'].toString()),
+                        createdAt: homeController.showAllList[index]['createdAt'],
+                        image: "$serverURL/${homeController.showAllList[index]['image']}-mini.webp",
+                        name: homeController.showAllList[index]['name'],
+                        price: homeController.showAllList[index]['price'],
+                      ),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 3 / 5),
+                    );
+                  }),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 

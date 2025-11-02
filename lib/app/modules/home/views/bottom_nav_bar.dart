@@ -1,5 +1,7 @@
 // // ignore_for_file: file_names, must_be_immutable, always_use_package_imports, avoid_void_async, non_constant_identifier_names
 
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:get/get.dart';
@@ -25,28 +27,49 @@ class _BottomNavBarState extends State<BottomNavBar> {
   final ColorController colorController = Get.put(ColorController());
   final CartPageController cartController = Get.put(CartPageController());
   final UserProfilController userProfilController = Get.put(UserProfilController());
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      bottomNavigationBar: bottomNavBar(),
-      bottomSheet: selectedIndex == 2 ? bottomSheetOrderPrice() : SizedBox.shrink(),
-      appBar: selectedIndex == 0
-          ? homeViewAppBar(false)
-          : CustomAppBar(
-              backArrow: false,
-              actionIcon: true,
-              icon: iconsAppBar[selectedIndex],
-              name: '${pageTitle[selectedIndex]}'.tr,
+    print(returnImage());
+    return Stack(
+      children: [
+        Stack(
+          fit: StackFit.expand,
+          children: [
+            Image.asset(
+              returnImage(),
+              fit: BoxFit.cover,
             ),
-      body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Center(
-          child: page[selectedIndex],
+            BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6), // blur seviyesi
+              child: Container(
+                color: colorController.mainColor.withOpacity(0.1),
+              ),
+            ),
+          ],
         ),
-      ),
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          bottomNavigationBar: bottomNavBar(),
+          bottomSheet: selectedIndex == 2 ? bottomSheetOrderPrice() : const SizedBox.shrink(),
+          appBar: selectedIndex == 0
+              ? homeViewAppBar(false)
+              : CustomAppBar(
+                  backArrow: false,
+                  actionIcon: true,
+                  icon: iconsAppBar[selectedIndex],
+                  name: '${pageTitle[selectedIndex]}'.tr,
+                ),
+          body: GestureDetector(
+            onTap: () {
+              FocusScope.of(context).unfocus();
+            },
+            child: Center(
+              child: page[selectedIndex],
+            ),
+          ),
+        ),
+      ],
     );
   }
 

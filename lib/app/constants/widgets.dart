@@ -1,6 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -243,11 +244,39 @@ void logOut() {
   );
 }
 
+String returnImage() {
+  if (colorController.findMainColor.value == 0) {
+    return 'assets/image/color1.png';
+  } else if (colorController.findMainColor.value == 1) {
+    return 'assets/image/color21.png';
+  } else if (colorController.findMainColor.value == 2) {
+    return 'assets/image/color31.png';
+  }
+  return 'assets/image/color41.png';
+}
+
+Widget backgroundWidget() {
+  return Stack(
+    fit: StackFit.expand,
+    children: [
+      Image.asset(
+        returnImage(),
+        fit: BoxFit.cover,
+      ),
+      BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6), // blur seviyesi
+        child: Container(
+          color: colorController.mainColor.withOpacity(0.1),
+        ),
+      ),
+    ],
+  );
+}
+
 Widget listViewName(String text, bool icon, Size size, Function() onTap) {
   return GestureDetector(
     onTap: onTap,
     child: Container(
-      color: Colors.white,
       padding: const EdgeInsets.only(left: 15, right: 15, top: 35, bottom: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -518,7 +547,7 @@ AppBar homeViewAppBar(bool? showArrow) {
   return AppBar(
     elevation: 0,
     toolbarHeight: 80,
-    backgroundColor: colorController.mainColor,
+    backgroundColor: Colors.transparent,
     centerTitle: true,
     leadingWidth: 0.0,
     titleSpacing: 0.0,
@@ -539,15 +568,20 @@ AppBar homeViewAppBar(bool? showArrow) {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 10, right: 5, top: 5),
                     child: Icon(IconlyLight.arrowLeftCircle, color: Colors.white),
-                  ))
+                  ),
+                )
               : SizedBox.shrink(),
           Expanded(
-              child: searchField(textEditingController, onFieldSubmitted: (String value) {
-            if (value.isNotEmpty) {
-              Get.to(() => ShowAllProducts(pageName: 'search', parametrs: {'search': value}));
-              textEditingController.clear();
-            }
-          })),
+            child: searchField(
+              textEditingController,
+              onFieldSubmitted: (String value) {
+                if (value.isNotEmpty) {
+                  Get.to(() => ShowAllProducts(pageName: 'search', parametrs: {'search': value}));
+                  textEditingController.clear();
+                }
+              },
+            ),
+          ),
         ],
       ),
     ),

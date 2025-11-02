@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:get/get.dart';
@@ -8,7 +10,6 @@ import 'package:nabelli_ecommerce/app/constants/loaders/loader_widgets.dart';
 import 'package:nabelli_ecommerce/app/constants/widgets.dart';
 import 'package:nabelli_ecommerce/app/data/services/abous_us_service.dart';
 import 'package:nabelli_ecommerce/app/data/services/create_order_service.dart';
-
 import 'package:nabelli_ecommerce/app/modules/cart_page/views/order_success_view.dart';
 
 import '../../../constants/text_fields/custom_text_field.dart';
@@ -58,7 +59,7 @@ class _OrderPageState extends State<OrderPage> {
     phoneController.clear();
     orderModel = CreateOrderService().getOrderInfo();
     cartController.list.forEach((element) {
-      String a = element['weight'].toString().isEmpty
+      final String a = element['weight'].toString().isEmpty
           ? '0.0'
           : element['weight'].toString() == 'null'
               ? '0.0'
@@ -80,14 +81,14 @@ class _OrderPageState extends State<OrderPage> {
       }
     }).catchError((error) {
       // Handle potential errors from the future
-      print("Error calculating initial price: $error");
+      print('Error calculating initial price: $error');
     });
   }
 
   Container userInfo() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-      decoration: const BoxDecoration(color: Colors.white, borderRadius: borderRadius20),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: borderRadius20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -220,84 +221,113 @@ class _OrderPageState extends State<OrderPage> {
     );
   }
 
+  String returnImage() {
+    if (colorController.findMainColor.value == 0) {
+      return 'assets/image/color1.png';
+    } else if (colorController.findMainColor.value == 1) {
+      return 'assets/image/color21.png';
+    } else if (colorController.findMainColor.value == 2) {
+      return 'assets/image/color31.png';
+    }
+    return 'assets/image/color41.png';
+  }
+
   @override
   Widget build(BuildContext context) {
-    double price = double.parse(widget.finalPrice.toString()) + sumPriceAdded;
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      // extendBody: true,
-      resizeToAvoidBottomInset: false,
-      appBar: CustomAppBar(
-        backArrow: true,
-        actionIcon: false,
-        name: 'orders',
-      ),
-      floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
-      floatingActionButton: Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-          height: 70,
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: AgreeButton(
-            text: "orderMe".tr + " ${price.toStringAsFixed(2)} TMT",
-            onTap: () {
-              if (_orderPage.currentState!.validate()) {
-                homeController.agreeButton.value = !homeController.agreeButton.value;
-                CreateOrderService()
-                    .createOrder(userName: userNameController.text, userPhoneNumber: phoneController.text, address: '$name + ${addressController.text}', note: '', transport: orderTypeNum)
-                    .then((value) {
-                  if (value == 200) {
-                    cartController.cartListToCompare.clear();
-                    cartController.removeAllCartElements();
-                    homeController.agreeButton.value = !homeController.agreeButton.value;
-                    Get.off(() => const OrderSuccessView());
-                  } else {
-                    showSnackBar('errorTitle'.tr + '$value', 'error', Colors.red);
-                    homeController.agreeButton.value = !homeController.agreeButton.value;
-                  }
-                });
-              } else {
-                showSnackBar('noConnection3', 'errorEmpty', Colors.red);
-              }
-            },
-          ),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
-      body: Form(
-        key: _orderPage,
-        child: ListView(
-          padding: const EdgeInsets.all(15.0),
+    final double price = double.parse(widget.finalPrice.toString()) + sumPriceAdded;
+    return Stack(
+      children: [
+        Stack(
+          fit: StackFit.expand,
           children: [
-            userInfo(),
-            Container(
-              padding: EdgeInsets.all(10),
-              margin: EdgeInsets.symmetric(vertical: 10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: borderRadius10,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "orderKG".tr + "${sumWeight.toString() == '0.0' ? "" : " : ${sumWeight} KG"}",
-                    style: TextStyle(color: Colors.black, fontFamily: gilroyBold, fontSize: 18),
-                  ),
-                  Text(
-                    "orderKGSubtitle".tr,
-                    style: TextStyle(color: Colors.grey, fontFamily: gilroyRegular, fontSize: 14),
-                  ),
-                ],
-              ),
+            Image.asset(
+              returnImage(),
+              fit: BoxFit.cover,
             ),
-            orderInfowidget(),
-            const SizedBox(
-              height: 100,
+            BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6), // blur seviyesi
+              child: Container(
+                color: colorController.mainColor.withOpacity(0.1),
+              ),
             ),
           ],
         ),
-      ),
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          resizeToAvoidBottomInset: false,
+          appBar: CustomAppBar(
+            backArrow: true,
+            actionIcon: false,
+            name: 'orders',
+          ),
+          floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
+          floatingActionButton: Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              height: 70,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: AgreeButton(
+                text: 'orderMe'.tr + ' ${price.toStringAsFixed(2)} TMT',
+                onTap: () {
+                  if (_orderPage.currentState!.validate()) {
+                    homeController.agreeButton.value = !homeController.agreeButton.value;
+                    CreateOrderService()
+                        .createOrder(userName: userNameController.text, userPhoneNumber: phoneController.text, address: '$name + ${addressController.text}', note: '', transport: orderTypeNum)
+                        .then((value) {
+                      if (value == 200) {
+                        cartController.cartListToCompare.clear();
+                        cartController.removeAllCartElements();
+                        homeController.agreeButton.value = !homeController.agreeButton.value;
+                        Get.off(() => const OrderSuccessView());
+                      } else {
+                        showSnackBar('errorTitle'.tr + '$value', 'error', Colors.red);
+                        homeController.agreeButton.value = !homeController.agreeButton.value;
+                      }
+                    });
+                  } else {
+                    showSnackBar('noConnection3', 'errorEmpty', Colors.red);
+                  }
+                },
+              ),
+            ),
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
+          body: Form(
+            key: _orderPage,
+            child: ListView(
+              padding: const EdgeInsets.all(15.0),
+              children: [
+                userInfo(),
+                Container(
+                  padding: EdgeInsets.all(10),
+                  margin: EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: borderRadius10,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'orderKG'.tr + "${sumWeight.toString() == '0.0' ? "" : " : ${sumWeight} KG"}",
+                        style: TextStyle(color: Colors.black, fontFamily: gilroyBold, fontSize: 18),
+                      ),
+                      Text(
+                        'orderKGSubtitle'.tr,
+                        style: TextStyle(color: Colors.grey, fontFamily: gilroyRegular, fontSize: 14),
+                      ),
+                    ],
+                  ),
+                ),
+                orderInfowidget(),
+                const SizedBox(
+                  height: 100,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -340,7 +370,7 @@ class _OrderPageState extends State<OrderPage> {
                   Expanded(
                     child: Text(
                       snapshot.data!.info!.toString(),
-                      style: const TextStyle(color: Colors.grey, fontSize: 17, fontFamily: gilroyRegular),
+                      style: const TextStyle(color: Colors.black, fontSize: 17, fontFamily: gilroyRegular),
                     ),
                   ),
                 ],
@@ -356,15 +386,13 @@ class _OrderPageState extends State<OrderPage> {
                 } else if (snapshot.data == null) {
                   return SizedBox.shrink();
                 }
-                String lang = Get.locale!.languageCode;
-                if (lang == 'tr' || lang == 'en') {
-                  lang = 'tm';
-                }
+                final String lang = Get.locale!.languageCode;
+
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    lang == 'tm' ? snapshot.data!['privacy_tm'] : snapshot.data!['privacy_ru'],
-                    style: const TextStyle(color: Colors.grey, fontFamily: gilroyRegular, fontSize: 18),
+                    lang == 'tr' ? snapshot.data!['privacy_tm'] : snapshot.data!['privacy_ru'],
+                    style: const TextStyle(color: Colors.black, fontFamily: gilroyRegular, fontSize: 18),
                   ),
                 );
               },

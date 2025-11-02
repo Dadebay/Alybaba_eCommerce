@@ -13,6 +13,10 @@ class AboutUsService {
     if (lang == 'tr' || lang == 'en') {
       lang = 'tm';
     }
+    if (lang == 'en') {
+      lang = 'ru';
+    }
+    print('$serverURL/api/$lang/get-shop-data');
     final response = await http.get(
       Uri.parse(
         '$serverURL/api/$lang/get-shop-data',
@@ -31,14 +35,17 @@ class AboutUsService {
   }
 
   Future getRules() async {
-    String lang = Get.locale!.languageCode;
-    if (lang == 'tr' || lang == 'en') {
+    String lang = '';
+
+    if (Get.locale!.languageCode == 'en') {
+      lang = 'ru';
+    } else if (Get.locale!.languageCode == 'tr') {
       lang = 'tm';
+    } else {
+      lang = Get.locale!.languageCode;
     }
     final response = await http.get(
-      Uri.parse(
-        '$serverURL/api/$lang/get-rules',
-      ),
+      Uri.parse('$serverURL/api/$lang/get-rules'),
       headers: <String, String>{
         HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
       },

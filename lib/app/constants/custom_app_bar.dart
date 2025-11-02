@@ -65,7 +65,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSize {
           SizedBox.shrink(),
       ],
       automaticallyImplyLeading: false,
-      backgroundColor: colorController.mainColor,
+      backgroundColor: Colors.transparent,
       title: Text(
         name.tr,
         maxLines: 1,

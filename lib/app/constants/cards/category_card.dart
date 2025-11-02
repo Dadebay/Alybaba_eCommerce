@@ -62,7 +62,7 @@ class CategoryCard extends StatelessWidget {
             child: Container(
               margin: const EdgeInsets.only(left: 10, top: 15, right: 10),
               padding: const EdgeInsets.all(15),
-              decoration: const BoxDecoration(color: Colors.black54, borderRadius: borderRadius40),
+              decoration: BoxDecoration(color: Colors.black54.withOpacity(0.6), borderRadius: borderRadius40),
               alignment: Alignment.center,
               child: Text(
                 name,

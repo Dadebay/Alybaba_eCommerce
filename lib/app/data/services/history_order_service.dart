@@ -12,10 +12,15 @@ import 'auth_service.dart';
 
 class HistoryOrdersService {
   Future<List<HistoryOrdersModel>> getHistoryOrders() async {
-    String lang = Get.locale!.languageCode;
     final token = await Auth().getToken();
-    if (lang == 'tr' || lang == 'en') {
+    String lang = '';
+
+    if (Get.locale!.languageCode == 'en') {
+      lang = 'ru';
+    } else if (Get.locale!.languageCode == 'tr') {
       lang = 'tm';
+    } else {
+      lang = Get.locale!.languageCode;
     }
     final List<HistoryOrdersModel> historyOrders = [];
     final response = await http.get(
@@ -27,7 +32,8 @@ class HistoryOrdersService {
         HttpHeaders.authorizationHeader: 'Bearer $token',
       },
     );
-    print("$serverURL/api/user/$lang/get-orders");
+    print(token);
+    print('$serverURL/api/user/$lang/get-orders');
     print(response.body);
     if (response.statusCode == 200) {
       final responseJson = json.decode(response.body)['rows'];
@@ -41,10 +47,15 @@ class HistoryOrdersService {
   }
 
   Future<bool> cancelOrder(int id) async {
-    String lang = Get.locale!.languageCode;
     final token = await Auth().getToken();
-    if (lang == 'tr' || lang == 'en') {
+    String lang = '';
+
+    if (Get.locale!.languageCode == 'en') {
+      lang = 'ru';
+    } else if (Get.locale!.languageCode == 'tr') {
       lang = 'tm';
+    } else {
+      lang = Get.locale!.languageCode;
     }
     print('$serverURL/api/user/$lang/cancel-order/$id');
     print(token);
@@ -62,10 +73,10 @@ class HistoryOrdersService {
     if (response.statusCode == 200) {
       getHistoryOrders();
 
-      showSnackBar("canceled", "canceledSubtitle", Colors.green);
+      showSnackBar('canceled', 'canceledSubtitle', Colors.green);
       return true;
     } else {
-      showSnackBar("errorTitle", "error", Colors.red);
+      showSnackBar('errorTitle', 'error', Colors.red);
       return false;
     }
   }
@@ -98,7 +109,15 @@ class HistoryOrdersService {
   }
 
   Future<bool> isAvailableOnlinePayment() async {
-    const lang = 'ru';
+    String lang = '';
+
+    if (Get.locale!.languageCode == 'en') {
+      lang = 'ru';
+    } else if (Get.locale!.languageCode == 'tr') {
+      lang = 'tm';
+    } else {
+      lang = Get.locale!.languageCode;
+    }
     final token = await Auth().getToken();
     final response = await http.get(
       Uri.parse(
@@ -118,7 +137,15 @@ class HistoryOrdersService {
   }
 
   Future<String?> prepayment(int orderId) async {
-    const lang = 'ru';
+    String lang = '';
+
+    if (Get.locale!.languageCode == 'en') {
+      lang = 'ru';
+    } else if (Get.locale!.languageCode == 'tr') {
+      lang = 'tm';
+    } else {
+      lang = Get.locale!.languageCode;
+    }
     final token = await Auth().getToken();
     final response = await http.get(
       Uri.parse(
