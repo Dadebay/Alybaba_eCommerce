@@ -1,4 +1,5 @@
 buildscript {
+    // Belirttiğiniz Kotlin sürümü korunuyor.
     ext.kotlin_version = '2.0.20'
 
     repositories {
@@ -7,6 +8,7 @@ buildscript {
     }
 
     dependencies {
+        // Belirttiğiniz Android Gradle Plugin sürümü korunuyor.
         classpath 'com.android.tools.build:gradle:8.1.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
@@ -17,19 +19,37 @@ allprojects {
         google()
         mavenCentral()
     }
-    // This code is where all the magic happens and fixes the error.
-    subprojects {
-        afterEvaluate { project ->
-            if (project.hasProperty('android')) {
-                project.android {
-                    if (namespace == null) {
-                        namespace project.group
+}
+
+// ===================================================================
+// ** HATA DÜZELTMESİ **
+// Bu blok, projenizdeki tüm alt modüllerin (hem uygulamanızın hem de
+// bağımlılıkların) Java 1.8'i hedeflemesini sağlayarak JVM uyumluluk
+// hatasını çözer.
+// ===================================================================
+subprojects {
+    afterEvaluate { project ->
+        if (project.hasProperty('android')) {
+            project.android {
+                // Namespace için eklediğiniz kod burada korunuyor.
+                if (namespace == null) {
+                    namespace project.group
+                }
+
+                // Java ve Kotlin derleyici seçenekleri tüm modüller için burada ayarlanıyor.
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_1_8
+                    targetCompatibility JavaVersion.VERSION_1_8
+                }
+
+                project.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+                    kotlinOptions {
+                        jvmTarget = "1.8"
                     }
                 }
             }
         }
     }
-    // This code is where all the magic happens and fixes the error.
 }
 
 rootProject.buildDir = '../build'

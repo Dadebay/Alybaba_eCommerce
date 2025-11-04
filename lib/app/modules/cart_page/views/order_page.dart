@@ -386,12 +386,22 @@ class _OrderPageState extends State<OrderPage> {
                 } else if (snapshot.data == null) {
                   return SizedBox.shrink();
                 }
-                final String lang = Get.locale!.languageCode;
+
+                final data = snapshot.data as Map<String, dynamic>?;
+                if (data == null) {
+                  return SizedBox.shrink();
+                }
+
+                final String privacyText = Get.locale!.languageCode == 'tr' ? (data['privacy_tm']?.toString() ?? '') : (data['privacy_ru']?.toString() ?? '');
+
+                if (privacyText.isEmpty) {
+                  return SizedBox.shrink();
+                }
 
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    lang == 'tr' ? snapshot.data!['privacy_tm'] : snapshot.data!['privacy_ru'],
+                    privacyText,
                     style: const TextStyle(color: Colors.black, fontFamily: gilroyRegular, fontSize: 18),
                   ),
                 );

@@ -37,7 +37,7 @@ class TermsAndConditions extends StatelessWidget {
                 child: ListView(
                   children: [
                     Text(
-                      lang == 'tr' ? snapshot.data!['privacy_tm'] ?? '' : snapshot.data!['privacy_ru'] ?? '',
+                      Get.locale!.languageCode == 'tr' ? snapshot.data!['privacy_tm'] ?? '' : snapshot.data!['privacy_ru'] ?? '',
                       style: const TextStyle(color: Colors.black, fontFamily: gilroyRegular, fontSize: 18),
                     ),
                   ],

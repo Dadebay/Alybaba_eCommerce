@@ -2,27 +2,13 @@
 
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nabelli_ecommerce/app/constants/constants.dart';
-import 'package:nabelli_ecommerce/app/constants/errors/empty_widgets.dart';
-import 'package:nabelli_ecommerce/app/constants/errors/error_widgets.dart';
-import 'package:nabelli_ecommerce/app/constants/loaders/loader_widgets.dart';
 
-import '../../../constants/widgets.dart';
-import '../../../data/models/banner_model.dart';
-import '../../../data/services/banner_service.dart';
-import '../../../data/services/product_service.dart';
-import '../../cart_page/controllers/cart_page_controller.dart';
 import '../../home/controllers/color_controller.dart';
-import '../../home/views/banner_profil_view.dart';
 import '../../home/views/bottom_nav_bar.dart';
-import '../../other_pages/product_profil_view.dart';
-import '../../other_pages/show_all_products.dart';
-import '../../user_profil/controllers/favorites_page_controller.dart';
 
 class ConnectionCheckView extends StatefulWidget {
   const ConnectionCheckView({Key? key}) : super(key: key);
@@ -32,16 +18,12 @@ class ConnectionCheckView extends StatefulWidget {
 }
 
 class _ConnectionCheckViewState extends State {
-  final CartPageController cartPageController = Get.put(CartPageController());
-  final FavoritesPageController favPageController = Get.put(FavoritesPageController());
   final ColorController colorController = Get.put(ColorController());
 
   @override
   void initState() {
     super.initState();
     checkConnection();
-    cartPageController.returnCartList();
-    favPageController.returnFavList();
   }
 
   void checkConnection() async {
@@ -175,58 +157,7 @@ class _ConnectionCheckViewState extends State {
       backgroundColor: colorController.mainColor,
       body: Column(
         children: [
-          Expanded(
-            child: FutureBuilder<List<BannerModel>>(
-              future: BannerService().getBanners(1),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return spinKit();
-                } else if (snapshot.hasError) {
-                  return logoPart();
-                } else if (snapshot.data!.isEmpty) {
-                  return logoPart();
-                }
-                final Random rand = Random();
-                final int random = rand.nextInt(snapshot.data!.length);
-                return GestureDetector(
-                  onTap: () async {
-                    if (snapshot.data![random].pathId! == 1) {
-                      await Get.to(
-                        () => BannerProfileView(
-                          description: snapshot.data![random].descriptionTM!,
-                          image: '$serverURL/${snapshot.data![random].destination!}-mini.webp',
-                          pageName: snapshot.data![random].titleTM!,
-                        ),
-                      );
-                    } else if (snapshot.data![random].pathId == 2) {
-                      await Get.to(() => ShowAllProducts(pageName: 'banner', parametrs: {'main_category_id': '${snapshot.data![random].itemId}'}));
-                    } else if (snapshot.data![random].pathId == 3) {
-                      await ProductsService().getProductByID(snapshot.data![random].itemId!).then((value) {
-                        Get.to(() => ProductProfilView(name: value.name!, id: value.id!, image: '$serverURL/${value.images!.first}-mini.webp', price: value.price!));
-                      });
-                    } else {
-                      showSnackBar('errorTitle', 'error', Colors.red);
-                    }
-                  },
-                  child: CachedNetworkImage(
-                      fadeInCurve: Curves.ease,
-                      imageUrl: '$serverURL/${snapshot.data![random].destination!}-mini.webp',
-                      imageBuilder: (context, imageProvider) => Container(
-                            width: size.width,
-                            decoration: BoxDecoration(
-                              borderRadius: borderRadius10,
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                      placeholder: (context, url) => spinKit(),
-                      errorWidget: (context, url, error) => logoPart()),
-                );
-              },
-            ),
-          ),
+          Expanded(child: logoPart()),
           const LinearProgressIndicator(),
         ],
       ),

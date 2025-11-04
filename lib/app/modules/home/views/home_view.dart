@@ -5,8 +5,11 @@ import 'package:nabelli_ecommerce/app/constants/constants.dart';
 import 'package:nabelli_ecommerce/app/constants/loaders/loader_widgets.dart';
 import 'package:nabelli_ecommerce/app/data/models/product_model.dart';
 import 'package:nabelli_ecommerce/app/data/services/banner_service.dart';
+import 'package:nabelli_ecommerce/app/data/services/fcm_service.dart';
+import 'package:nabelli_ecommerce/app/modules/cart_page/controllers/cart_page_controller.dart';
 import 'package:nabelli_ecommerce/app/modules/home/views/banners.dart';
 import 'package:nabelli_ecommerce/app/modules/other_pages/show_all_products.dart';
+import 'package:nabelli_ecommerce/app/modules/user_profil/controllers/favorites_page_controller.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../constants/widgets.dart';
@@ -21,6 +24,8 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   List pageName = ['newItems', 'inOurHands', 'recomendedItems', 'mostOrdered'];
+  final CartPageController cartPageController = Get.put(CartPageController());
+  final FavoritesPageController favPageController = Get.put(FavoritesPageController());
   final HomeController homeController = Get.put(HomeController());
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
   void _onRefresh() async {
@@ -30,10 +35,20 @@ class _HomeViewState extends State<HomeView> {
     setState(() {});
   }
 
+  getData() async {
+    // Send FCM Token to Server - Disabled for faster startup
+    await FCMService().sendFcmToken();
+    cartPageController.returnCartList();
+    favPageController.returnFavList();
+  }
+
   @override
   void initState() {
     super.initState();
+    // Send FCM Token to Server - Disabled for faster startup
+    // await FCMService().sendFcmToken();
     BannerService().getBanners(3);
+    getData();
   }
 
   final ColorController colorController2 = Get.put(ColorController());

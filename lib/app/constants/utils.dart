@@ -22,7 +22,7 @@ class MyTranslations extends Translations {
 
           ///
           "productWeight": "Haryt kg",
-          'logOutUser': 'Siz ulgamdan çykdyňyz',
+          'logOutUser': 'Hasabyňyz pozuldy',
           'forKargo': 'Kargo üçin :',
           'totalProducts': 'Hemme harytlar',
           'stockInHand': 'Elimizdaki harytlar',
@@ -79,8 +79,8 @@ class MyTranslations extends Translations {
           'giveLike': 'Bizi Play marketde bahalandyryň',
           'home': 'Baş sahypa',
           'locations': 'Salgylarym',
-          'log_out_title': 'Siz hakykatdanda ulgamdan çykmak isleýärsiňizmi ?',
-          'log_out': 'Ulgamdan çyk',
+          'log_out_title': 'Siz hakykatdanda hasabyňyzy pozmak isleýärsiňizmi ?',
+          'log_out': 'Hasaby poz',
           'login': 'Ulgama gir',
           'loginError': 'Ulgama giriň',
           'loginError1': 'Hyzmaty ýerine ýetirmek üçin ulgama giriň',
@@ -268,7 +268,7 @@ class MyTranslations extends Translations {
           'onlinePay': 'Онлайн-оплата',
           'payByPhone': 'Оплата по телефону',
 
-          'logOutUser': 'Вы вышли из системы', //translate this russian
+          'logOutUser': 'Ваш аккаунт удален', //translate this russian
 
           'forKargo': 'Стоимость доставки :',
           'totalProducts': 'Все товары',
@@ -359,8 +359,8 @@ class MyTranslations extends Translations {
           'giveLike': 'Оцените нас на Play Market',
           'home': 'Главная',
           'locations': 'Мои адреса',
-          'log_out_title': 'Вы действительно хотите выйти из приложения?',
-          'log_out': 'Выйти',
+          'log_out_title': 'Вы действительно хотите удалить свой аккаунт?',
+          'log_out': 'Удалить аккаунт',
           'login': 'Войти',
           'loginError': 'Войти',
           'loginError1': 'Войдите, чтобы выполнить услугу',
@@ -480,7 +480,7 @@ class MyTranslations extends Translations {
         'en': {
           "productWeight": "Product kg",
 
-          'logOutUser': 'You are logged out', //translate this russian
+          'logOutUser': 'Your account has been deleted', //translate this russian
 
           'forKargo': 'Kargo fee :',
           'totalProducts': 'Total Product',
@@ -583,8 +583,8 @@ class MyTranslations extends Translations {
           'giveLike': 'Rate us on Play Market',
           'home': 'Home',
           'locations': 'Locations',
-          'log_out_title': 'Are you sure you want to log out?',
-          'log_out': 'Log out',
+          'log_out_title': 'Are you sure you want to delete your account?',
+          'log_out': 'Delete account',
           'login': 'Log in',
           'loginError': 'Log in',
           'loginError1': 'Log in to run the service',

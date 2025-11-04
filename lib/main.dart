@@ -12,8 +12,6 @@ import 'package:nabelli_ecommerce/app/constants/firebase_messaging_service.dart'
 import 'package:nabelli_ecommerce/app/constants/local_notifications_service.dart';
 import 'package:nabelli_ecommerce/firebase_options.dart';
 
-import 'package:nabelli_ecommerce/app/data/services/fcm_service.dart';
-
 import 'app/constants/utils.dart';
 import 'app/modules/auth/views/connection_check_view.dart';
 import 'app/modules/home/controllers/color_controller.dart';
@@ -36,9 +34,6 @@ Future<void> main() async {
   ]);
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
-  // Send FCM Token to Server
-  await FCMService().sendFcmToken();
 
   final localNotificationsService = LocalNotificationsService.instance();
   await localNotificationsService.init();

@@ -30,7 +30,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    print(returnImage());
     return Stack(
       children: [
         Stack(
