@@ -317,7 +317,7 @@ class HistoryOrderProductProfil extends StatelessWidget {
             shrinkWrap: true,
             itemCount: phoneNumbers.length,
             itemBuilder: (context, index) {
-              final phoneNumber = phoneNumbers[index];
+              final phoneNumber = phoneNumbers[index].substring(4, phoneNumbers[index].length);
               final prepaymentAmount = (double.parse(orderData.total!) * orderData.prepayment_percent!) / 100;
               return Card(
                 elevation: 2,
@@ -326,9 +326,10 @@ class HistoryOrderProductProfil extends StatelessWidget {
                   leading: const Icon(IconlyLight.call, color: Colors.black),
                   title: Text(phoneNumber, style: const TextStyle(fontFamily: gilroyMedium)),
                   onTap: () {
-                    final smsBody = '$phoneNumber ${prepaymentAmount.toStringAsFixed(2)} TMT';
+                    final smsBody = '$phoneNumber ${prepaymentAmount.toStringAsFixed(2)}';
+                    print(smsBody);
                     _sendSms('0804', smsBody);
-                    Get.back();
+                    // Get.back();
                   },
                 ),
               );

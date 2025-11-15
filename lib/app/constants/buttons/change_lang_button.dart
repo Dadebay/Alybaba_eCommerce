@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nabelli_ecommerce/app/constants/constants.dart';
+import 'package:nabelli_ecommerce/app/modules/auth/views/connection_check_view.dart';
 import 'package:nabelli_ecommerce/app/modules/user_profil/controllers/user_profil_controller.dart';
 import 'package:restart_app/restart_app.dart';
 
@@ -28,7 +29,7 @@ class ChangeLangButton extends StatelessWidget {
           minVerticalPadding: 0,
           onTap: () {
             userProfilController.switchLang(langText[index]);
-            Restart.restartApp();
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ConnectionCheckView()));
           },
           leading: CircleAvatar(
             backgroundImage: AssetImage(

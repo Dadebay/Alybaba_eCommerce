@@ -11,6 +11,7 @@ import 'package:nabelli_ecommerce/app/constants/constants.dart';
 import 'package:nabelli_ecommerce/app/constants/firebase_messaging_service.dart';
 import 'package:nabelli_ecommerce/app/constants/local_notifications_service.dart';
 import 'package:nabelli_ecommerce/firebase_options.dart';
+import 'package:nabelli_ecommerce/global_safe_area_wrapper.dart';
 
 import 'app/constants/utils.dart';
 import 'app/modules/auth/views/connection_check_view.dart';
@@ -104,7 +105,7 @@ class _MyAppState extends State<MyApp> {
             ),
       translations: MyTranslations(),
       defaultTransition: Transition.fade,
-      home: const ConnectionCheckView(),
+      home: GlobalSafeAreaWrapper(child: const ConnectionCheckView()),
     );
   }
 }

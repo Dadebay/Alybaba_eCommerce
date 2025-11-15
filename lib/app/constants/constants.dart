@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:get/get.dart';
@@ -5,6 +6,7 @@ import 'package:nabelli_ecommerce/app/constants/widgets.dart';
 import 'package:nabelli_ecommerce/app/modules/cart_page/views/cart_view.dart';
 import 'package:nabelli_ecommerce/app/modules/category/views/category_view.dart';
 import 'package:nabelli_ecommerce/app/modules/home/views/home_view.dart';
+import 'package:nabelli_ecommerce/app/modules/user_profil/history_order/history_order_status_wait.dart';
 import 'package:nabelli_ecommerce/app/modules/user_profil/views/user_profil_view.dart';
 
 // String serverURL = 'http://216.250.12.49:5001';
@@ -18,9 +20,13 @@ const Color kBlackColor = Color(0xff2b2b2b);
 
 //Bottom nav bar List
 List page = [const HomeView(), const CategoriesView(), const CartView(), const UserProfilView()];
+List loginPages = [const HomeView(), const CategoriesView(), const CartView(), OrderStatusWait(whichStatus: 1), const UserProfilView()];
 List pageTitle = ['home'.tr, 'category'.tr, 'cart'.tr, 'profil'.tr];
+List loginPageTitle = ['home'.tr, 'category'.tr, 'cart'.tr, 'orders'.tr, 'profil'.tr];
 List icons = [IconlyLight.home, IconlyLight.category, IconlyLight.buy, IconlyLight.profile];
+List loginIcons = [IconlyLight.home, IconlyLight.category, IconlyLight.buy, CupertinoIcons.cube_box, IconlyLight.profile];
 List iconsBold = [IconlyBold.home, IconlyBold.category, IconlyBold.buy, IconlyBold.profile];
+List loginiconsBold = [IconlyBold.home, IconlyBold.category, IconlyBold.buy, CupertinoIcons.cube_box_fill, IconlyBold.profile];
 List iconsAppBar = [homeViewAppBar(false), SizedBox.shrink(), DeleteButton(), CallButton()];
 
 ///BorderRadius

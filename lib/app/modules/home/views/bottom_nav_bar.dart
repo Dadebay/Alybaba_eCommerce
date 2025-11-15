@@ -108,8 +108,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
                         iconsBold[index],
                       )
                 : Icon(iconsBold[index]),
-            label: '${pageTitle[index]}'.tr,
-            tooltip: '${pageTitle[index]}'.tr,
+            label: pageTitle[index],
+            tooltip: pageTitle[index],
           ),
         ),
       );

@@ -131,12 +131,6 @@ class _ProductProfilViewState extends State<ProductProfilView> {
               } else if (snapshot.hasError) {
                 return Container(color: Colors.amber, child: referalPageError());
               }
-              print(snapshot.data);
-              print(snapshot.data!.orderCount!.toString());
-              print(snapshot.data!.orderCount!.toString());
-              print(snapshot.data!.orderCount!.toString());
-              print(snapshot.data!.orderCount!.toString());
-              print(snapshot.data!.orderCount!.toString());
               final List images = snapshot.data!.images ?? [];
               return Column(
                 children: [

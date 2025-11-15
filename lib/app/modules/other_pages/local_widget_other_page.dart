@@ -134,7 +134,7 @@ Container productProfildescriptionPart({
         twoText(name1: "${"category".tr} :", name2: category),
         productWeight.isEmpty ? SizedBox.shrink() : twoText(name1: 'productWeight'.tr, name2: productWeight),
         twoText(name1: 'data3'.tr, name2: viewCount),
-        twoText(name1: 'createdAt'.tr, name2: createdAt),
+        // twoText(name1: 'createdAt'.tr, name2: createdAt),
         const SizedBox(
           height: 30,
         ),
