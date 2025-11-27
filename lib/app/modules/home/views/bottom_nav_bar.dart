@@ -1,7 +1,8 @@
-// // ignore_for_file: file_names, must_be_immutable, always_use_package_imports, avoid_void_async, non_constant_identifier_names
+// ignore_for_file: file_names, must_be_immutable, always_use_package_imports, avoid_void_async, non_constant_identifier_names
 
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:get/get.dart';
@@ -24,9 +25,30 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State<BottomNavBar> {
   int selectedIndex = 0;
+  bool isUserLogin = false;
+
   final ColorController colorController = Get.put(ColorController());
   final CartPageController cartController = Get.put(CartPageController());
   final UserProfilController userProfilController = Get.put(UserProfilController());
+
+  @override
+  void initState() {
+    super.initState();
+    checkToken();
+  }
+
+  dynamic checkToken() async {
+    final String? token = await Auth().getToken();
+    if (token == null || token == '') {
+      setState(() {
+        isUserLogin = false;
+      });
+    } else {
+      setState(() {
+        isUserLogin = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,15 +78,15 @@ class _BottomNavBarState extends State<BottomNavBar> {
               : CustomAppBar(
                   backArrow: false,
                   actionIcon: true,
-                  icon: iconsAppBar[selectedIndex],
-                  name: '${pageTitle[selectedIndex]}'.tr,
+                  icon: isUserLogin ? loginIconsAppBar[selectedIndex] : iconsAppBar[selectedIndex],
+                  name: isUserLogin ? loginPageTitle[selectedIndex] : pageTitle[selectedIndex],
                 ),
           body: GestureDetector(
             onTap: () {
               FocusScope.of(context).unfocus();
             },
             child: Center(
-              child: page[selectedIndex],
+              child: isUserLogin ? loginPages[selectedIndex] : page[selectedIndex],
             ),
           ),
         ),
@@ -74,7 +96,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   Widget bottomNavBar() {
     return Obx(() {
-      print(cartController.list.length);
       return BottomNavigationBar(
         backgroundColor: Colors.white,
         iconSize: 26,
@@ -92,24 +113,20 @@ class _BottomNavBarState extends State<BottomNavBar> {
           });
         },
         items: List.generate(
-          4,
+          isUserLogin ? loginIcons.length : icons.length,
           (index) => BottomNavigationBarItem(
-            icon: cartController.list.length > 0
-                ? index == 2
-                    ? iconWithBadge(index, false)
-                    : Icon(
-                        icons[index],
-                      )
-                : Icon(icons[index]),
-            activeIcon: cartController.list.length > 0
-                ? index == 2
-                    ? iconWithBadge(index, true)
-                    : Icon(
-                        iconsBold[index],
-                      )
-                : Icon(iconsBold[index]),
-            label: pageTitle[index],
-            tooltip: pageTitle[index],
+            icon: cartController.list.isNotEmpty && index == 2
+                ? iconWithBadge(index, false)
+                : Icon(
+                    isUserLogin ? loginIcons[index] : icons[index],
+                  ),
+            activeIcon: cartController.list.isNotEmpty && index == 2
+                ? iconWithBadge(index, true)
+                : Icon(
+                    isUserLogin ? loginiconsBold[index] : iconsBold[index],
+                  ),
+            label: isUserLogin ? loginPageTitle[index] : pageTitle[index],
+            tooltip: isUserLogin ? loginPageTitle[index] : pageTitle[index],
           ),
         ),
       );
@@ -120,20 +137,26 @@ class _BottomNavBarState extends State<BottomNavBar> {
     return Stack(
       children: [
         Icon(
-          active ? iconsBold[index] : icons[index],
+          active
+              ? isUserLogin
+                  ? loginiconsBold[index]
+                  : iconsBold[index]
+              : isUserLogin
+                  ? loginIcons[index]
+                  : icons[index],
         ),
         Positioned(
           right: 0,
           top: -4,
           child: Container(
-            padding: EdgeInsets.all(4),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.all(4),
+            decoration: const BoxDecoration(
               color: Colors.red,
               shape: BoxShape.circle,
             ),
             child: Text(
               cartController.list.length.toString(),
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 10,
                 fontFamily: gilroyBold,
@@ -232,7 +255,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                   ),
                 ),
                 iconAlignment: IconAlignment.end,
-                icon: Icon(
+                icon: const Icon(
                   IconlyBroken.arrowRightCircle,
                   color: Colors.white,
                   size: 20,

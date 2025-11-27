@@ -28,6 +28,7 @@ List loginIcons = [IconlyLight.home, IconlyLight.category, IconlyLight.buy, Cupe
 List iconsBold = [IconlyBold.home, IconlyBold.category, IconlyBold.buy, IconlyBold.profile];
 List loginiconsBold = [IconlyBold.home, IconlyBold.category, IconlyBold.buy, CupertinoIcons.cube_box_fill, IconlyBold.profile];
 List iconsAppBar = [homeViewAppBar(false), SizedBox.shrink(), DeleteButton(), CallButton()];
+List loginIconsAppBar = [homeViewAppBar(false), const SizedBox.shrink(), DeleteButton(), const SizedBox.shrink(), CallButton()];
 
 ///BorderRadius
 const BorderRadius borderRadius5 = BorderRadius.all(Radius.circular(5));

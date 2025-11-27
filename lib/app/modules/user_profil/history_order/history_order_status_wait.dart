@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:get/get.dart';
 import 'package:nabelli_ecommerce/app/constants/cards/order_history_card.dart';
@@ -47,7 +48,7 @@ class OrderStatusWait extends StatelessWidget {
         ),
         Scaffold(
           backgroundColor: Colors.transparent,
-          appBar: CustomAppBar(backArrow: true, actionIcon: false, name: 'orders'),
+          // appBar: CustomAppBar(backArrow: true, actionIcon: false, name: 'orders'),
           body: FutureBuilder<List<HistoryOrdersModel>>(
             future: HistoryOrdersService().getHistoryOrders(),
             builder: (context, snapshot) {
@@ -91,6 +92,7 @@ class HistoryOrderProductProfil extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      bottom: true,
       top: false,
       child: Stack(
         children: [
@@ -328,8 +330,12 @@ class HistoryOrderProductProfil extends StatelessWidget {
                   onTap: () {
                     final smsBody = '$phoneNumber ${prepaymentAmount.toStringAsFixed(2)}';
                     print(smsBody);
-                    _sendSms('0804', smsBody);
-                    // Get.back();
+                    print(smsBody);
+                    print(smsBody);
+                    print(smsBody);
+                    print(smsBody);
+                    _sendSmsIntent('0804', smsBody);
+                    Get.back();
                   },
                 ),
               );
@@ -340,19 +346,26 @@ class HistoryOrderProductProfil extends StatelessWidget {
     );
   }
 
-  void _sendSms(String recipient, String body) async {
-    final Uri smsUri = Uri(
-      scheme: 'sms',
-      path: recipient,
-      queryParameters: <String, String>{
-        'body': body,
-      },
-    );
-
-    if (await canLaunchUrl(smsUri)) {
-      await launchUrl(smsUri);
-    } else {
-      showSnackBar('errorTitle'.tr, 'could_not_launch_sms'.tr, Colors.red);
+  Future<void> _sendSmsIntent(String phone, String body) async {
+    try {
+      // Android için doğrudan SMS intent'i oluştur
+      final String smsUri = 'sms:$phone?body=$body';
+      print(smsUri);
+      print(smsUri);
+      print(smsUri);
+      print(smsUri);
+      print(smsUri);
+      if (await canLaunchUrl(Uri.parse(smsUri))) {
+        await launchUrl(
+          Uri.parse(smsUri),
+          mode: LaunchMode.externalApplication,
+        );
+      } else {
+        showSnackBar('errorTitle'.tr, 'sms_app_not_found'.tr, Colors.red);
+      }
+    } catch (e) {
+      print("SMS hatası: $e");
+      showSnackBar('errorTitle'.tr, 'sms_send_failed'.tr, Colors.red);
     }
   }
 

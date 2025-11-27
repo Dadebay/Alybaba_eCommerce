@@ -32,21 +32,21 @@ class _UserProfilViewState extends State<UserProfilView> {
     return Obx(() {
       return ListView(
         children: [
-          ProfilButton(
-            name: 'orders',
-            onTap: () {
-              if (userProfilController.userLogin.value) {
-                Get.to(
-                  () => const OrderStatusWait(
-                    whichStatus: 1,
-                  ),
-                );
-              } else {
-                showSnackBar('loginError', 'loginError1', Colors.red);
-              }
-            },
-            icon: CupertinoIcons.cube_box,
-          ),
+          // ProfilButton(
+          //   name: 'orders',
+          //   onTap: () {
+          //     if (userProfilController.userLogin.value) {
+          //       Get.to(
+          //         () => const OrderStatusWait(
+          //           whichStatus: 1,
+          //         ),
+          //       );
+          //     } else {
+          //       showSnackBar('loginError', 'loginError1', Colors.red);
+          //     }
+          //   },
+          //   icon: CupertinoIcons.cube_box,
+          // ),
           ProfilButton(
             name: 'favorites',
             onTap: () {

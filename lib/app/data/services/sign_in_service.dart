@@ -28,6 +28,9 @@ class SignInService {
         'code': otp,
       }),
     );
+    print(response.body);
+    print(response.statusCode);
+    print(response.body);
     if (response.statusCode == 200) {
       final responseJson = json.decode(response.body);
       await Auth().setToken(responseJson['access_token']);

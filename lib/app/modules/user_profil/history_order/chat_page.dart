@@ -84,35 +84,37 @@ class _ChatPageState extends State<ChatPage> {
     return Stack(
       children: [
         backgroundWidget(),
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: CustomAppBar(
-            backArrow: true,
-            actionIcon: false,
-            name: 'chat'.tr,
-          ),
-          body: Column(
-            children: [
-              Expanded(
-                child: _isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : _messagesList.isEmpty
-                        ? Center(child: Text('no_messages_yet'.tr))
-                        : ListView.builder(
-                            padding: const EdgeInsets.all(10.0),
-                            itemCount: _messagesList.length,
-                            itemBuilder: (context, index) {
-                              final message = _messagesList[index];
-                              final bool isMe = message.sender == 'user';
-                              return ChatBubble(
-                                message: message.message,
-                                isMe: isMe,
-                              );
-                            },
-                          ),
-              ),
-              _buildMessageComposer(),
-            ],
+        SafeArea(
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: CustomAppBar(
+              backArrow: true,
+              actionIcon: false,
+              name: 'chat'.tr,
+            ),
+            body: Column(
+              children: [
+                Expanded(
+                  child: _isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : _messagesList.isEmpty
+                          ? Center(child: Text('no_messages_yet'.tr))
+                          : ListView.builder(
+                              padding: const EdgeInsets.all(10.0),
+                              itemCount: _messagesList.length,
+                              itemBuilder: (context, index) {
+                                final message = _messagesList[index];
+                                final bool isMe = message.sender == 'user';
+                                return ChatBubble(
+                                  message: message.message,
+                                  isMe: isMe,
+                                );
+                              },
+                            ),
+                ),
+                _buildMessageComposer(),
+              ],
+            ),
           ),
         ),
       ],
@@ -172,7 +174,7 @@ class ChatBubble extends StatelessWidget {
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-        padding: const EdgeInsets.all(12.0),
+        padding: EdgeInsets.all(12.0),
         decoration: BoxDecoration(
           color: isMe ? Colors.black : Colors.white,
           borderRadius: isMe

@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get_utils/get_utils.dart';
 import 'package:nabelli_ecommerce/app/constants/buttons/fav_button_view.dart';
 import 'package:nabelli_ecommerce/app/constants/cards/product_card.dart';
@@ -86,121 +87,124 @@ class _ProductProfilViewState extends State<ProductProfilView> {
             ),
           ],
         ),
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: CustomAppBar(
-            backArrow: true,
-            actionIcon: true,
-            icon: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Share.share(widget.image, subject: appName);
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(top: 8, bottom: 4, right: 15),
-                    child: Image.asset(
-                      shareIcon,
-                      width: 24,
-                      height: 24,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                FavButton(
-                  whiteColor: false,
-                  createdAt: DateTime.now().toString(),
-                  id: widget.id,
-                  price: widget.price,
-                  name: widget.name,
-                  image: widget.image,
-                ),
-                SizedBox(width: 8),
-              ],
-            ),
-            name: widget.name,
-          ),
-          body: FutureBuilder<ProductByIDModel>(
-            future: productProfil,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Container(color: Colors.white, child: spinKit());
-              } else if (snapshot.data == null) {
-                return Container(color: Colors.red, child: referalPageEmptyData());
-              } else if (snapshot.hasError) {
-                return Container(color: Colors.amber, child: referalPageError());
-              }
-              final List images = snapshot.data!.images ?? [];
-              return Column(
+        SafeArea(
+          bottom: true,
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: CustomAppBar(
+              backArrow: true,
+              actionIcon: true,
+              icon: Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Expanded(
-                    child: ListView(
-                      shrinkWrap: true,
-                      children: [
-                        imagesView(images),
-                        productProfilNamePricePart(
-                          name: snapshot.data!.name!,
-                          kargoIncluded: snapshot.data!.kargoIncluded!,
-                          price: snapshot.data!.price!,
-                          barCode: snapshot.data!.barcode.toString(),
-                          dostawkaPrice: snapshot.data!.weightPrice.toString(),
-                        ),
-                        productProfildescriptionPart(
-                          brand: snapshot.data!.producerName!,
-                          category: snapshot.data!.mainCategoryName!,
-                          createdAt: snapshot.data!.createdAt!.substring(0, 10),
-                          description: snapshot.data!.description!,
-                          viewCount: snapshot.data!.viewCount!.toString(),
-                          productWeight: snapshot.data!.weight!.toString(),
-                          orderedCount: snapshot.data!.orderCount!.toString(),
-                        ),
-                        Container(
-                          color: Colors.white,
-                          padding: EdgeInsets.only(
-                            bottom: snapshot.data!.colors!.isEmpty && snapshot.data!.sizes!.isEmpty ? 0 : 35,
-                          ),
-                          child: Column(
-                            children: [
-                              snapshot.data!.colors!.isEmpty ? const SizedBox.shrink() : chooseColor(size, snapshot.data!.colors!),
-                              snapshot.data!.sizes!.isEmpty ? const SizedBox.shrink() : chooseSize(size, snapshot.data!.sizes!),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          color: Colors.white,
-                          padding: const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 15),
-                          child: Text(
-                            'sameProducts'.tr,
-                            style: TextStyle(color: Colors.black, fontSize: size.width >= 800 ? 30 : 22, fontFamily: gilroyBold),
-                          ),
-                        ),
-                        GridView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: sameProductsList.length,
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (BuildContext context, int index) {
-                            return ProductCard(
-                              discountValue: sameProductsList[index].discountValue!,
-                              discountValueType: sameProductsList[index].discountValueType!,
-                              historyOrder: false,
-                              id: sameProductsList[index].id!,
-                              createdAt: sameProductsList[index].createdAt!,
-                              image: '$serverURL/${sameProductsList[index].image!}-mini.webp',
-                              name: sameProductsList[index].name!,
-                              price: sameProductsList[index].price!,
-                            );
-                          },
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisExtent: size.height * 0.35),
-                        ),
-                      ],
+                  GestureDetector(
+                    onTap: () {
+                      Share.share(widget.image, subject: appName);
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(top: 8, bottom: 4, right: 15),
+                      child: Image.asset(
+                        shareIcon,
+                        width: 24,
+                        height: 24,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                  addCartButtonPart(price: widget.price, id: widget.id),
+                  FavButton(
+                    whiteColor: false,
+                    createdAt: DateTime.now().toString(),
+                    id: widget.id,
+                    price: widget.price,
+                    name: widget.name,
+                    image: widget.image,
+                  ),
+                  SizedBox(width: 8),
                 ],
-              );
-            },
+              ),
+              name: widget.name,
+            ),
+            body: FutureBuilder<ProductByIDModel>(
+              future: productProfil,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Container(color: Colors.white, child: spinKit());
+                } else if (snapshot.data == null) {
+                  return Container(color: Colors.red, child: referalPageEmptyData());
+                } else if (snapshot.hasError) {
+                  return Container(color: Colors.amber, child: referalPageError());
+                }
+                final List images = snapshot.data!.images ?? [];
+                return Column(
+                  children: [
+                    Expanded(
+                      child: ListView(
+                        shrinkWrap: true,
+                        children: [
+                          imagesView(images),
+                          productProfilNamePricePart(
+                            name: snapshot.data!.name!,
+                            kargoIncluded: snapshot.data!.kargoIncluded!,
+                            price: snapshot.data!.price!,
+                            barCode: snapshot.data!.barcode.toString(),
+                            dostawkaPrice: snapshot.data!.weightPrice.toString(),
+                          ),
+                          productProfildescriptionPart(
+                            brand: snapshot.data!.producerName!,
+                            category: snapshot.data!.mainCategoryName!,
+                            createdAt: snapshot.data!.createdAt!.substring(0, 10),
+                            description: snapshot.data!.description!,
+                            viewCount: snapshot.data!.viewCount!.toString(),
+                            productWeight: snapshot.data!.weight!.toString(),
+                            orderedCount: snapshot.data!.orderCount!.toString(),
+                          ),
+                          Container(
+                            color: Colors.white,
+                            padding: EdgeInsets.only(
+                              bottom: snapshot.data!.colors!.isEmpty && snapshot.data!.sizes!.isEmpty ? 0 : 35,
+                            ),
+                            child: Column(
+                              children: [
+                                snapshot.data!.colors!.isEmpty ? const SizedBox.shrink() : chooseColor(size, snapshot.data!.colors!),
+                                snapshot.data!.sizes!.isEmpty ? const SizedBox.shrink() : chooseSize(size, snapshot.data!.sizes!),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            color: Colors.white,
+                            padding: const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 15),
+                            child: Text(
+                              'sameProducts'.tr,
+                              style: TextStyle(color: Colors.black, fontSize: size.width >= 800 ? 30 : 22, fontFamily: gilroyBold),
+                            ),
+                          ),
+                          GridView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: sameProductsList.length,
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (BuildContext context, int index) {
+                              return ProductCard(
+                                discountValue: sameProductsList[index].discountValue!,
+                                discountValueType: sameProductsList[index].discountValueType!,
+                                historyOrder: false,
+                                id: sameProductsList[index].id!,
+                                createdAt: sameProductsList[index].createdAt!,
+                                image: '$serverURL/${sameProductsList[index].image!}-mini.webp',
+                                name: sameProductsList[index].name!,
+                                price: sameProductsList[index].price!,
+                              );
+                            },
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisExtent: size.height * 0.35),
+                          ),
+                        ],
+                      ),
+                    ),
+                    addCartButtonPart(price: widget.price, id: widget.id),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ],

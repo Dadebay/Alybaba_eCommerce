@@ -36,7 +36,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   getData() async {
-    // Send FCM Token to Server - Disabled for faster startup
+    await BannerService().getBanners(3);
     await FCMService().sendFcmToken();
     cartPageController.returnCartList();
     favPageController.returnFavList();
@@ -45,9 +45,6 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    // Send FCM Token to Server - Disabled for faster startup
-    // await FCMService().sendFcmToken();
-    BannerService().getBanners(3);
     getData();
   }
 
