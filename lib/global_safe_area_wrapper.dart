@@ -49,7 +49,7 @@ class ThemeHelper {
 
   final Map<String, ColorScheme> _supportedColorScheme = {'primary': ColorSchemes.primaryColorScheme};
 
-  void changeTheme(String newTheme) {
+  void changeTheme(String newTheme) { 
     _appTheme = newTheme;
   }
 

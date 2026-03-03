@@ -85,6 +85,7 @@ class ProductByIDModel {
   final String? barcode;
   final String? orderCount;
   final bool? kargoIncluded;
+  final String? brandName;
 
   final int? categoryID;
   final int? viewCount;
@@ -118,6 +119,7 @@ class ProductByIDModel {
     this.weightPrice,
     this.producerId,
     this.subCategoryId,
+    this.brandName,
   });
 
   factory ProductByIDModel.fromJson(Map<dynamic, dynamic> json) {
@@ -152,6 +154,7 @@ class ProductByIDModel {
       barcode: json['barcode'] ?? '#000000',
       viewCount: json['view_count'] ?? '1',
       createdAt: json['created_at'] ?? '#000000',
+      brandName: json['brand_name'] ?? '',
       images: images,
       sizes: json['sizes'] != null ? (json['sizes'] as List).map((json) => SizeModel.fromJson(json)).toList() : [],
       colors: json['colors'] != null ? (json['colors'] as List).map((json) => ColorModel.fromJson(json)).toList() : [],

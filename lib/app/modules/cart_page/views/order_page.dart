@@ -309,7 +309,7 @@ class _OrderPageState extends State<OrderPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'orderKG'.tr + "${sumWeight.toString() == '0.0' ? "" : " : ${sumWeight} KG"}",
+                        'orderKG'.tr + "${sumWeight.toString() == '0.0' ? "" : " : ${sumWeight.toStringAsFixed(2)} KG"}",
                         style: TextStyle(color: Colors.black, fontFamily: gilroyBold, fontSize: 18),
                       ),
                       Text(

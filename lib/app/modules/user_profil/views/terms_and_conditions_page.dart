@@ -31,14 +31,14 @@ class TermsAndConditions extends StatelessWidget {
                 return referalPageEmptyData();
               }
               final String lang = Get.locale!.languageCode;
-
+              print(Get.locale!.languageCode);
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView(
                   children: [
                     Text(
-                      Get.locale!.languageCode == 'tr' ? snapshot.data!['privacy_tm'] ?? '' : snapshot.data!['privacy_ru'] ?? '',
-                      style: const TextStyle(color: Colors.black, fontFamily: gilroyRegular, fontSize: 18),
+                      Get.locale!.languageCode == 'tr' || Get.locale!.languageCode == 'tm' ? snapshot.data!['privacy_tm'] ?? '' : snapshot.data!['privacy_ru'] ?? '',
+                      style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontFamily: gilroyRegular, fontSize: 18),
                     ),
                   ],
                 ),

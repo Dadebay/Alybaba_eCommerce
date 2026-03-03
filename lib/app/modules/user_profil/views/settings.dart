@@ -134,7 +134,7 @@ class _SettingsState extends State<Settings> {
   void changeLanguage() {
     Get.bottomSheet(
       Container(
-        padding: const EdgeInsets.only(bottom: 20),
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 20),
         decoration: const BoxDecoration(color: Colors.white),
         child: Wrap(
           children: [
@@ -163,13 +163,14 @@ class _SettingsState extends State<Settings> {
           ],
         ),
       ),
+      ignoreSafeArea: false,
     );
   }
 
   dynamic changeColor() {
     Get.bottomSheet(
       Container(
-        padding: const EdgeInsets.only(bottom: 20),
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 20, top: 10, right: 10),
         decoration: const BoxDecoration(color: Colors.white),
         child: Wrap(
           children: [
@@ -196,6 +197,7 @@ class _SettingsState extends State<Settings> {
           ],
         ),
       ),
+      ignoreSafeArea: false,
     );
   }
 }

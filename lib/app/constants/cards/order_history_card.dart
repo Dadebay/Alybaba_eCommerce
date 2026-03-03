@@ -97,10 +97,7 @@ class OrderHistoryCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Get.to(
-          () => HistoryOrderProductProfil(
-            id: snapshot.data![index].id!,
-            pageName: "${"order".tr} ${snapshot.data!.length - index}",
-          ),
+          () => HistoryOrderProductProfil(id: snapshot.data![index].id!, pageName: "${"order".tr} #${snapshot.data![index].id}"),
         );
       },
       child: Container(
@@ -117,7 +114,7 @@ class OrderHistoryCard extends StatelessWidget {
         ),
         child: Column(
           children: [
-            topPart(snapshot.data!.length - index - 1, snapshot),
+            topPart(index, snapshot),
             Expanded(
               flex: 2,
               child: SizedBox(

@@ -7,6 +7,35 @@ class CartPageController extends GetxController {
   RxList list = [].obs;
   RxList cartListToCompare = [].obs;
   final storage = GetStorage();
+
+  @override
+  void onInit() {
+    super.onInit();
+    ever(list, (_) {
+      printCartSummary();
+    });
+  }
+
+  int get badgeItemCount => list.length;
+
+  double get totalPrice {
+    double sum = 0;
+    for (final element in list) {
+      final double price = double.tryParse(element['price'].toString()) ?? 0;
+      final int quantity = (element['quantity'] as num?)?.toInt() ?? 0;
+      sum += price * quantity;
+    }
+    return sum;
+  }
+
+  void printCartSummary() {
+    print('═══════════════════════════════════════');
+    print('SEPET OTOMATIK GUNCELLEME:');
+    print('Badge Urun Sayisi: $badgeItemCount');
+    print('Toplam Fiyat: ${totalPrice.toStringAsFixed(2)} TMT');
+    print('═══════════════════════════════════════');
+  }
+
   void addToCard(
       {required int id,
       required String price,
@@ -33,10 +62,6 @@ class CartPageController extends GetxController {
     }
     list.refresh();
     final String jsonString = jsonEncode(list);
-    print(list.last['weight']);
-    print(list.last['weight']);
-    print(list.last['weight']);
-    print(list.last['weight']);
     storage.write('cartList', jsonString);
   }
 
@@ -44,22 +69,26 @@ class CartPageController extends GetxController {
     final result = storage.read('cartList') ?? '[]';
     final List jsonData = jsonDecode(result);
     if (jsonData.isEmpty) {
-    } else {
-      for (final element in jsonData) {
-        list.add({
-          'id': element['id'],
-          'price': element['price'],
-          'image': element['image'],
-          'name': element['name'],
-          'createdAt': element['createdAt'],
-          'quantity': element['quantity'],
-          'sizeID': element['sizeID'],
-          'colorID': element['colorID'],
-          'airplane': element['airplane'],
-          'weight': element['weight'],
-        });
-      }
+      return;
     }
+    list.assignAll(
+      jsonData
+          .map(
+            (element) => {
+              'id': element['id'],
+              'price': element['price'],
+              'image': element['image'],
+              'name': element['name'],
+              'createdAt': element['createdAt'],
+              'quantity': element['quantity'],
+              'sizeID': element['sizeID'],
+              'colorID': element['colorID'],
+              'airplane': element['airplane'],
+              'weight': element['weight'],
+            },
+          )
+          .toList(),
+    );
   }
 
   void minusCardElement(int id) {

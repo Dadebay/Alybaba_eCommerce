@@ -16,29 +16,32 @@ class HomeController extends GetxController {
   RxInt page = 0.obs;
   RxList showAllList = [].obs;
 
-  late Future<List<BannerModel>> bannersFuture;
-  late Future<List<BannerModel>> minibannerFuture;
-  late Future<List<ProductModel>> newItemsProducts;
-  late Future<List<ProductModel>> mostOrdered;
+  Future<List<BannerModel>> bannersFuture = Future.value([]);
+  Future<List<BannerModel>> minibannerFuture = Future.value([]);
+  Future<List<ProductModel>> newItemsProducts = Future.value([]);
+  Future<List<ProductModel>> originalProducts = Future.value([]);
+  Future<List<ProductModel>> mostOrdered = Future.value([]);
   List parameters = [
     {'new_in_come': 'true', 'page': '0', 'limit': '20', 'sort_column': 'random', 'sort_direction': 'DESC'},
+    {'original': 'true', 'page': '0', 'limit': '20', 'sort_column': 'random', 'sort_direction': 'ASC'},
     {'recomended': 'true', 'page': '0', 'limit': '20', 'sort_column': 'random', 'sort_direction': 'ASC'},
     {'on_hand': 'true', 'page': '0', 'limit': '20', 'sort_column': 'random', 'sort_direction': 'ASC'},
     {'ordered_count': 'true', 'page': '0', 'limit': '20', 'sort_column': 'ordered_count', 'sort_direction': 'DESC'},
   ];
 
   //
-  late Future<List<ProductModel>> productsFutureInOurHands;
-  late Future<List<ProductModel>> productsFutureRecomended;
+  Future<List<ProductModel>> productsFutureInOurHands = Future.value([]);
+  Future<List<ProductModel>> productsFutureRecomended = Future.value([]);
   dynamic getData() {
     minibannerFuture = BannerService().getBanners(3);
     bannersFuture = BannerService().getBanners(2);
-    mostOrdered = ProductsService().getProducts(parametrs: parameters[3]);
-    newItemsProducts = ProductsService().getProducts(parametrs: parameters[0]);
-    productsFutureRecomended = ProductsService().getProducts(parametrs: parameters[1]);
-    productsFutureInOurHands = ProductsService().getProducts(
-      parametrs: parameters[2],
-    );
+    newItemsProducts = ProductsService().getProducts(parametrs: parameters[0], label: 'newItems [index:0]');
+
+    originalProducts = ProductsService().getProducts(parametrs: parameters[1], label: 'original [index:1]');
+
+    productsFutureRecomended = ProductsService().getProducts(parametrs: parameters[2], label: 'recommended [index:2]');
+    productsFutureInOurHands = ProductsService().getProducts(parametrs: parameters[3], label: 'inOurHands [index:3]');
+    mostOrdered = ProductsService().getProducts(parametrs: parameters[4], label: 'mostOrdered [index:4]');
   }
 
   @override

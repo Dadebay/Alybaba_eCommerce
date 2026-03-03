@@ -52,6 +52,8 @@ class AboutUsService {
     );
     if (response.statusCode == 200) {
       final decoded = utf8.decode(response.bodyBytes);
+      print(decoded);
+      print(decoded);
       return json.decode(decoded);
     } else {
       return response.body;

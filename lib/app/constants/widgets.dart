@@ -165,8 +165,10 @@ Padding divider2() {
 }
 
 void logOut() {
+  final bottomPadding = MediaQuery.of(Get.context!).padding.bottom;
   Get.bottomSheet(
     Container(
+      padding: EdgeInsets.only(bottom: bottomPadding),
       decoration: const BoxDecoration(color: Colors.white),
       child: Wrap(
         children: [
@@ -241,6 +243,7 @@ void logOut() {
         ],
       ),
     ),
+    ignoreSafeArea: false,
   );
 }
 
@@ -324,8 +327,10 @@ CustomFooter footer() {
 }
 
 void defaultBottomSheet({required String name, required Widget child}) {
+  final bottomPadding = MediaQuery.of(Get.context!).padding.bottom;
   Get.bottomSheet(
     Container(
+      padding: EdgeInsets.only(bottom: bottomPadding),
       decoration: const BoxDecoration(color: Colors.white),
       child: Wrap(
         children: [
@@ -358,6 +363,7 @@ void defaultBottomSheet({required String name, required Widget child}) {
         ],
       ),
     ),
+    ignoreSafeArea: false,
   );
 }
 

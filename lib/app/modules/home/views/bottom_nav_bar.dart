@@ -25,6 +25,7 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State<BottomNavBar> {
   int selectedIndex = 0;
+  int previousIndex = 0;
   bool isUserLogin = false;
 
   final ColorController colorController = Get.put(ColorController());
@@ -108,7 +109,25 @@ class _BottomNavBarState extends State<BottomNavBar> {
         unselectedLabelStyle: const TextStyle(fontFamily: gilroyMedium, fontSize: 12),
         currentIndex: selectedIndex,
         onTap: (index) async {
+          // // Sepet sayfasına yeni geçildiğinde ürün sayısı ve toplam fiyatı print et
+          // if (index == 2) {
+          //   int productCount = cartController.list.length;
+          //   double totalPrice = 0;
+
+          //   for (var element in cartController.list) {
+          //     final double price = double.parse(element['price']);
+          //     totalPrice += price * element['quantity'];
+          //   }
+
+          //   print('═══════════════════════════════════════');
+          //   print('SEPET BİLGİLERİ:');
+          //   print('Ürün Sayısı: $productCount');
+          //   print('Toplam Fiyat: ${totalPrice.toStringAsFixed(2)} TMT');
+          //   print('═══════════════════════════════════════');
+          // }
+
           setState(() {
+            previousIndex = selectedIndex;
             selectedIndex = index;
           });
         },

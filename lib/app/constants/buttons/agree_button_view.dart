@@ -19,7 +19,13 @@ class AgreeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(onTap: onTap, child: animatedContaner());
+    return SafeArea(
+      top: false,
+      left: false,
+      right: false,
+      bottom: true,
+      child: GestureDetector(onTap: onTap, child: animatedContaner()),
+    );
   }
 
   final ColorController colorController = Get.put(ColorController());

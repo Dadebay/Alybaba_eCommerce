@@ -151,6 +151,7 @@ class _ProductProfilViewState extends State<ProductProfilView> {
                           ),
                           productProfildescriptionPart(
                             brand: snapshot.data!.producerName!,
+                            brandName: snapshot.data!.brandName ?? '',
                             category: snapshot.data!.mainCategoryName!,
                             createdAt: snapshot.data!.createdAt!.substring(0, 10),
                             description: snapshot.data!.description!,

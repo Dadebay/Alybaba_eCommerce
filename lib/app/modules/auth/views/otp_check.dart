@@ -81,9 +81,7 @@ class OtpCheck extends StatelessWidget {
                         if (value == 200) {
                           Get.find<UserProfilController>().userLogin.value = true;
                           Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                              builder: (context) => const ConnectionCheckView(),
-                            ),
+                            MaterialPageRoute(builder: (context) => const ConnectionCheckView()),
                             (Route<dynamic> route) => false,
                           );
                         } else {
@@ -96,9 +94,7 @@ class OtpCheck extends StatelessWidget {
                         if (value == 200) {
                           Get.find<UserProfilController>().userLogin.value = true;
                           Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                              builder: (context) => const ConnectionCheckView(),
-                            ),
+                            MaterialPageRoute(builder: (context) => const ConnectionCheckView()),
                             (Route<dynamic> route) => false,
                           );
                         } else {

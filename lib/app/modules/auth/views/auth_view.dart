@@ -21,16 +21,22 @@ class AuthView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: colorController.mainColor,
-      appBar: CustomAppBar(backArrow: true, actionIcon: false, name: ''),
-      body: ListView(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        children: [
-          logoPart(),
-          textPart(),
-        ],
+    return SafeArea(
+      top: false,
+      left: false,
+      right: false,
+      bottom: true,
+      child: Scaffold(
+        backgroundColor: colorController.mainColor,
+        appBar: CustomAppBar(backArrow: true, actionIcon: false, name: ''),
+        body: ListView(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          children: [
+            logoPart(),
+            textPart(),
+          ],
+        ),
       ),
     );
   }
@@ -129,7 +135,7 @@ class AuthView extends StatelessWidget {
 
   Widget logoPart() {
     return Container(
-      height: Get.size.height / 2.2,
+      height: Get.size.height / 2.4,
       child: Center(
         child: ClipRRect(
           borderRadius: borderRadius30,

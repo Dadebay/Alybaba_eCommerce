@@ -59,9 +59,16 @@ class OrderStatusWait extends StatelessWidget {
               } else if (snapshot.data!.isEmpty) {
                 return orderPageEmpty();
               }
+              snapshot.data!.sort((a, b) {
+                final DateTime aDate = DateTime.tryParse(a.createdAt ?? '') ?? DateTime.fromMillisecondsSinceEpoch(0);
+                final DateTime bDate = DateTime.tryParse(b.createdAt ?? '') ?? DateTime.fromMillisecondsSinceEpoch(0);
+                return bDate.compareTo(aDate);
+              });
               return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemExtent: 240,
+                reverse: false,
+                shrinkWrap: false,
                 itemBuilder: (BuildContext context, int index) {
                   return OrderHistoryCard(index: index, snapshot: snapshot);
                 },
@@ -91,6 +98,7 @@ class HistoryOrderProductProfil extends StatelessWidget {
   final String pageName;
   @override
   Widget build(BuildContext context) {
+    print(pageName);
     return SafeArea(
       bottom: true,
       top: false,

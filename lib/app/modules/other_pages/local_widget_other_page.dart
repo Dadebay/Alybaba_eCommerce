@@ -114,6 +114,7 @@ Container productProfildescriptionPart({
   required String description,
   required String productWeight,
   required String orderedCount,
+  String brandName = '',
 }) {
   return Container(
     padding: const EdgeInsets.all(15),
@@ -130,7 +131,8 @@ Container productProfildescriptionPart({
           ),
         ),
         twoText(name1: "${"orderedCount".tr} : ", name2: orderedCount),
-        twoText(name1: "${"brandPP".tr} : ", name2: brand),
+        // twoText(name1: "${"brandPP".tr} : ", name2: brand),
+        brandName.isEmpty ? const SizedBox.shrink() : twoText(name1: "${"brandPP".tr} : ", name2: brandName),
         twoText(name1: "${"category".tr} :", name2: category),
         productWeight.isEmpty ? SizedBox.shrink() : twoText(name1: 'productWeight'.tr, name2: productWeight),
         twoText(name1: 'data3'.tr, name2: viewCount),

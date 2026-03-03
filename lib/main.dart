@@ -45,7 +45,15 @@ Future<void> main() async {
 
   final firebaseMessagingService = FirebaseMessagingService.instance();
   await firebaseMessagingService.init(localNotificationsService: localNotificationsService);
-  await FirebaseMessaging.instance.subscribeToTopic('EVENT');
+  try {
+    await FirebaseMessaging.instance.subscribeToTopic('EVENT');
+    print('✅ [FCM] "EVENT" topic-ine subscribe edildi.');
+
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    print('📱 [FCM] Device Token: $fcmToken');
+  } catch (e) {
+    print('❌ [FCM] "EVENT" topic-ine subscribe edilemedi: $e');
+  }
   runApp(const MyApp());
 }
 
@@ -102,11 +110,11 @@ class _MyAppState extends State<MyApp> {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       fallbackLocale: const Locale('tm'),
-      locale: storage.read('langCode') != null
-          ? Locale(storage.read('langCode'))
-          : const Locale(
-              'tm',
-            ),
+      locale: storage.read('langCode') != null ? Locale(storage.read('langCode')) : const Locale('tm'),
+      builder: (context, child) => MediaQuery(
+        data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
+        child: child!,
+      ),
       translations: MyTranslations(),
       defaultTransition: Transition.fade,
       home: GlobalSafeAreaWrapper(child: const ConnectionCheckView()),

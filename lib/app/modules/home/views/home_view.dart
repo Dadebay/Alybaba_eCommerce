@@ -23,7 +23,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  List pageName = ['newItems', 'inOurHands', 'recomendedItems', 'mostOrdered'];
+  List pageName = ['newItems', 'originalProducts', 'recomendedItems', 'inOurHands', 'mostOrdered'];
   final CartPageController cartPageController = Get.put(CartPageController());
   final FavoritesPageController favPageController = Get.put(FavoritesPageController());
   final HomeController homeController = Get.put(HomeController());
@@ -70,8 +70,8 @@ class _HomeViewState extends State<HomeView> {
             future: homeController.bannersFuture,
             miniBanner: false,
           ),
-          products(size: size, index: 3, future: homeController.mostOrdered),
           products(size: size, index: 0, future: homeController.newItemsProducts),
+          products(size: size, index: 1, future: homeController.originalProducts),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20),
             child: Banners(
@@ -79,8 +79,9 @@ class _HomeViewState extends State<HomeView> {
               miniBanner: true,
             ),
           ),
-          products(size: size, index: 1, future: homeController.productsFutureRecomended),
-          products(size: size, index: 2, future: homeController.productsFutureInOurHands),
+          products(size: size, index: 2, future: homeController.productsFutureRecomended),
+          products(size: size, index: 3, future: homeController.productsFutureInOurHands),
+          products(size: size, index: 4, future: homeController.mostOrdered),
           const SizedBox(
             height: 30,
           ),
@@ -97,7 +98,8 @@ class _HomeViewState extends State<HomeView> {
     if (index >= pageName.length || index >= homeController.parameters.length) {
       return const SizedBox.shrink();
     }
-    return Wrap(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         listViewName(pageName[index], true, size, () {
           Get.to(() => ShowAllProducts(pageName: pageName[index], parametrs: homeController.parameters[index]));
