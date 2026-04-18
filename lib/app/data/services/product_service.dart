@@ -62,12 +62,14 @@ class ProductsService {
       print('ShowAllProducts - Response Status: 200');
       print('ShowAllProducts - Response Body: ${response.body}');
       homeController.loading.value = 3;
-      final responseJson = jsonDecode(response.body)['products'] as List;
-      print('ShowAllProducts - Products Count from API: ${responseJson.length}');
-      if (jsonDecode(response.body)['products'] == null || jsonDecode(response.body)['products'].toString() == '[]') {
+      final decoded = jsonDecode(response.body);
+      final rawProducts = decoded['products'];
+      if (rawProducts == null || rawProducts.toString() == '[]') {
         print('ShowAllProducts - No products found');
         showSnackBar('noProductTitle', 'noProductSubtitle', Colors.red);
       } else {
+        final responseJson = rawProducts as List;
+        print('ShowAllProducts - Products Count from API: ${responseJson.length}');
         print('ShowAllProducts - Processing products...');
         for (final Map product in responseJson) {
           homeController.showAllList.add({
