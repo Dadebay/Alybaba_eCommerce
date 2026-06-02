@@ -46,30 +46,42 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace "com.gurbanow.alybaba"
     compileSdkVersion 36
+    ndkVersion "29.0.14206865"
     compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
         coreLibraryDesugaringEnabled true
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
- lintOptions {
+    lintOptions {
         disable 'InvalidPackage'
         checkReleaseBuilds false //<- add this line
     }
     defaultConfig {
         applicationId "com.gurbanow.alybaba"
-        minSdkVersion 23
+        minSdkVersion flutter.minSdkVersion
         targetSdkVersion 36
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
+
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86_64'
+        }
+
+        // 16 KB page size support
+        externalNativeBuild {
+            cmake {
+                arguments "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
+            }
+        }
     }
     signingConfigs {
        release {
@@ -83,6 +95,17 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.debug
+        }
+    }
+    
+    packaging {
+        jniLibs {
+            useLegacyPackaging = false
+            // 16 KB page size support alignment
+            keepDebugSymbols += ['**/*.so']
+        }
+        resources {
+            excludes += ['/META-INF/{AL2.0,LGPL2.1}']
         }
     }
 }

@@ -1,16 +1,14 @@
 buildscript {
-    // Belirttiğiniz Kotlin sürümü korunuyor.
-    ext.kotlin_version = '2.0.20'
+    ext.kotlin_version = '2.1.0'
 
     repositories {
         google()
         mavenCentral()
     }
-
     dependencies {
-        // Belirttiğiniz Android Gradle Plugin sürümü korunuyor.
-        classpath 'com.android.tools.build:gradle:8.1.2'
+        classpath 'com.android.tools.build:gradle:8.7.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+//        classpath 'com.google.gms:google-services:4.4.1'
     }
 }
 
@@ -19,32 +17,21 @@ allprojects {
         google()
         mavenCentral()
     }
-}
-
-// ===================================================================
-// ** HATA DÜZELTMESİ **
-// Bu blok, projenizdeki tüm alt modüllerin (hem uygulamanızın hem de
-// bağımlılıkların) Java 1.8'i hedeflemesini sağlayarak JVM uyumluluk
-// hatasını çözer.
-// ===================================================================
-subprojects {
-    afterEvaluate { project ->
-        if (project.hasProperty('android')) {
-            project.android {
-                // Namespace için eklediğiniz kod burada korunuyor.
-                if (namespace == null) {
-                    namespace project.group
+    subprojects {
+        afterEvaluate { project ->
+            if (project.hasProperty('android')) {
+                project.android {
+                    if (namespace == null) {
+                        namespace project.group
+                    }
+                    compileOptions {
+                        sourceCompatibility JavaVersion.VERSION_17
+                        targetCompatibility JavaVersion.VERSION_17
+                    }
                 }
-
-                // Java ve Kotlin derleyici seçenekleri tüm modüller için burada ayarlanıyor.
-                compileOptions {
-                    sourceCompatibility JavaVersion.VERSION_1_8
-                    targetCompatibility JavaVersion.VERSION_1_8
-                }
-
-                project.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-                    kotlinOptions {
-                        jvmTarget = "1.8"
+                if (project.plugins.hasPlugin('kotlin-android')) {
+                    project.android.kotlinOptions {
+                        jvmTarget = '17'
                     }
                 }
             }
@@ -55,9 +42,8 @@ subprojects {
 rootProject.buildDir = '../build'
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
     project.evaluationDependsOn(':app')
+
 }
 
 tasks.register("clean", Delete) {

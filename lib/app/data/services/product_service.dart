@@ -28,7 +28,13 @@ class ProductsService {
     );
     if (response.statusCode == 200) {
       print('[$label] ✅ Status: 200');
-      final responseJson = jsonDecode(response.body)['products'] as List;
+      final decoded = jsonDecode(response.body);
+      final raw = decoded['products'];
+      if (raw == null) {
+        print('[$label] ⚠️ products field is null');
+        return [];
+      }
+      final responseJson = raw as List;
       print('[$label] 🔢 Ürün sayısı: ${responseJson.length}');
       for (final Map product in responseJson) {
         productsList.add(ProductModel.fromJson(product));

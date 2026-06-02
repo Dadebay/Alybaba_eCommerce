@@ -16,12 +16,18 @@ class HomeController extends GetxController {
   RxInt page = 0.obs;
   RxList showAllList = [].obs;
 
-  Future<List<BannerModel>> bannersFuture = Future.value([]);
-  Future<List<BannerModel>> minibannerFuture = Future.value([]);
-  Future<List<ProductModel>> newItemsProducts = Future.value([]);
-  Future<List<ProductModel>> originalProducts = Future.value([]);
-  Future<List<ProductModel>> mostOrdered = Future.value([]);
-  List parameters = [
+  // RxLists — layout sabit, FutureBuilder yok
+  RxList<BannerModel> banners = <BannerModel>[].obs;
+  RxList<BannerModel> miniBanners = <BannerModel>[].obs;
+  RxList<ProductModel> newItems = <ProductModel>[].obs;
+  RxList<ProductModel> originalItems = <ProductModel>[].obs;
+  RxList<ProductModel> recommendedItems = <ProductModel>[].obs;
+  RxList<ProductModel> inOurHandsItems = <ProductModel>[].obs;
+  RxList<ProductModel> mostOrderedItems = <ProductModel>[].obs;
+
+  RxBool isLoading = true.obs;
+
+  final List<Map<String, String>> parameters = [
     {'new_in_come': 'true', 'page': '0', 'limit': '20', 'sort_column': 'random', 'sort_direction': 'DESC'},
     {'original': 'true', 'page': '0', 'limit': '20', 'sort_column': 'random', 'sort_direction': 'ASC'},
     {'recomended': 'true', 'page': '0', 'limit': '20', 'sort_column': 'random', 'sort_direction': 'ASC'},
@@ -29,35 +35,41 @@ class HomeController extends GetxController {
     {'ordered_count': 'true', 'page': '0', 'limit': '20', 'sort_column': 'ordered_count', 'sort_direction': 'DESC'},
   ];
 
-  //
-  Future<List<ProductModel>> productsFutureInOurHands = Future.value([]);
-  Future<List<ProductModel>> productsFutureRecomended = Future.value([]);
-  dynamic getData() {
-    minibannerFuture = BannerService().getBanners(3);
-    bannersFuture = BannerService().getBanners(2);
-    newItemsProducts = ProductsService().getProducts(parametrs: parameters[0], label: 'newItems [index:0]');
-
-    originalProducts = ProductsService().getProducts(parametrs: parameters[1], label: 'original [index:1]');
-
-    productsFutureRecomended = ProductsService().getProducts(parametrs: parameters[2], label: 'recommended [index:2]');
-    productsFutureInOurHands = ProductsService().getProducts(parametrs: parameters[3], label: 'inOurHands [index:3]');
-    mostOrdered = ProductsService().getProducts(parametrs: parameters[4], label: 'mostOrdered [index:4]');
-  }
-
   @override
   void onInit() {
     super.onInit();
     getData();
   }
 
+  Future<void> getData() async {
+    isLoading.value = true;
+    try {
+      final results = await Future.wait([
+        BannerService().getBanners(2),
+        BannerService().getBanners(3),
+        ProductsService().getProducts(parametrs: parameters[0], label: 'newItems'),
+        ProductsService().getProducts(parametrs: parameters[1], label: 'original'),
+        ProductsService().getProducts(parametrs: parameters[2], label: 'recommended'),
+        ProductsService().getProducts(parametrs: parameters[3], label: 'inOurHands'),
+        ProductsService().getProducts(parametrs: parameters[4], label: 'mostOrdered'),
+      ]);
+      banners.value = results[0] as List<BannerModel>;
+      miniBanners.value = results[1] as List<BannerModel>;
+      newItems.value = results[2] as List<ProductModel>;
+      originalItems.value = results[3] as List<ProductModel>;
+      recommendedItems.value = results[4] as List<ProductModel>;
+      inOurHandsItems.value = results[5] as List<ProductModel>;
+      mostOrderedItems.value = results[6] as List<ProductModel>;
+    } catch (e) {
+      print('[HomeController] getData error: $e');
+    }
+    isLoading.value = false;
+  }
+
   final storage = GetStorage();
 
-  var tm = const Locale(
-    'tr',
-  );
-  var ru = const Locale(
-    'ru',
-  );
+  var tm = const Locale('tr');
+  var ru = const Locale('ru');
 
   dynamic switchLang(String value) {
     if (value == 'ru') {

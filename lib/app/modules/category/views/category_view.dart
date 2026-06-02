@@ -20,6 +20,7 @@ class _CategoriesViewState extends State<CategoriesView> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    final double cardSize = size.width >= 800 ? 220 : (size.width / 2) - 18;
 
     return FutureBuilder<List<CategoryModel>>(
       future: CategoryService().getCategories(),
@@ -31,11 +32,16 @@ class _CategoriesViewState extends State<CategoriesView> {
         } else if (snapshot.data!.isEmpty) {
           return referalPageError();
         }
-        return ListView.builder(
+        return GridView.builder(
           physics: const BouncingScrollPhysics(),
-          itemExtent: size.width >= 800 ? 320 : 220,
+          padding: const EdgeInsets.all(6),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: size.width >= 800 ? 3 : 2,
+            crossAxisSpacing: 0,
+            mainAxisSpacing: 0,
+            childAspectRatio: cardSize / (cardSize * 1.15),
+          ),
           itemCount: snapshot.data!.length,
-          scrollDirection: Axis.vertical,
           itemBuilder: (context, index) {
             return CategoryCard(
               subCategoryList: snapshot.data![index].subCategory!,

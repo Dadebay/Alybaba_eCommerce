@@ -16,6 +16,7 @@ class CategoryCard extends StatelessWidget {
     required this.subCategoryList,
     Key? key,
   }) : super(key: key);
+
   final String name;
   final String image;
   final int id;
@@ -24,54 +25,83 @@ class CategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Get.to(
-          () => SubCategoryView(
+      onTap: () => Get.to(() => SubCategoryView(
             subCategoryList: subCategoryList,
             categoryID: id,
             categoryName: name,
-          ),
-        );
-      },
-      child: Stack(
-        children: [
-          Container(
-            alignment: Alignment.center,
-            margin: const EdgeInsets.only(left: 10, top: 15, right: 10),
-            decoration: BoxDecoration(borderRadius: borderRadius40, color: Colors.grey, boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.4), spreadRadius: 1, blurRadius: 5)]),
-            child: ClipRRect(
-              borderRadius: borderRadius40,
-              child: CachedNetworkImage(
-                fadeInCurve: Curves.ease,
+          )),
+      child: Container(
+        margin: const EdgeInsets.all(6),
+        decoration: BoxDecoration(
+          borderRadius: borderRadius15,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.10),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: borderRadius15,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              CachedNetworkImage(
                 imageUrl: image,
-                imageBuilder: (context, imageProvider) => Container(
+                fit: BoxFit.cover,
+                placeholder: (context, url) => Container(
+                  color: Colors.grey[200],
+                  child: spinKit(),
+                ),
+                errorWidget: (context, url, error) => Container(
+                  color: Colors.grey[200],
+                  child: noBannerImage(),
+                ),
+              ),
+              // gradient sadece alt %45
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: Container(
                   decoration: BoxDecoration(
-                    borderRadius: borderRadius10,
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      stops: const [0.0, 0.5, 1.0],
+                      colors: [
+                        Colors.black.withOpacity(0.92),
+                        Colors.black.withOpacity(0.55),
+                        Colors.transparent,
+                      ],
+                    ),
+                  ),
+                  padding: const EdgeInsets.fromLTRB(8, 30, 8, 10),
+                  child: Text(
+                    name,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: gilroyBold,
+                      fontSize: 17,
+                      height: 1.3,
+                      shadows: [
+                        Shadow(
+                          color: Colors.black.withOpacity(0.8),
+                          blurRadius: 6,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                placeholder: (context, url) => spinKit(),
-                errorWidget: (context, url, error) => noBannerImage(),
               ),
-            ),
+            ],
           ),
-          Positioned.fill(
-            child: Container(
-              margin: const EdgeInsets.only(left: 10, top: 15, right: 10),
-              padding: const EdgeInsets.all(15),
-              decoration: BoxDecoration(color: Colors.black54.withOpacity(0.6), borderRadius: borderRadius40),
-              alignment: Alignment.center,
-              child: Text(
-                name,
-                textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.white, fontFamily: gilroyBold, fontSize: 40),
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
