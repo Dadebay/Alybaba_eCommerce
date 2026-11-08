@@ -28,9 +28,6 @@ class SignInService {
         'code': otp,
       }),
     );
-    print(response.body);
-    print(response.statusCode);
-    print(response.body);
     if (response.statusCode == 200) {
       final responseJson = json.decode(response.body);
       await Auth().setToken(responseJson['access_token']);
@@ -84,7 +81,6 @@ class SignInService {
     );
     if (response.statusCode == 200) {
       final responseJson = json.decode(response.body);
-      print(responseJson);
       if (phone == '62990344') {
         await Auth().setRefreshToken(responseJson['refresh_token']);
         userProfilController.saveData(phoneNumber1: phone, userName1: responseJson['data']['full_name'], userMoney1: '0', referalCode1: responseJson['data']['referral_code']);

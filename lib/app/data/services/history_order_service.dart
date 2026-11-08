@@ -32,9 +32,7 @@ class HistoryOrdersService {
         HttpHeaders.authorizationHeader: 'Bearer $token',
       },
     );
-    print(token);
     print('$serverURL/api/user/$lang/get-orders');
-    print(response.body);
     if (response.statusCode == 200) {
       final responseJson = json.decode(response.body)['rows'];
       for (final Map product in responseJson) {
@@ -58,7 +56,6 @@ class HistoryOrdersService {
       lang = Get.locale!.languageCode;
     }
     print('$serverURL/api/user/$lang/cancel-order/$id');
-    print(token);
     final response = await http.post(
       Uri.parse(
         '$serverURL/api/user/$lang/cancel-order/$id',
@@ -68,7 +65,6 @@ class HistoryOrdersService {
         HttpHeaders.authorizationHeader: 'Bearer $token',
       },
     );
-    print(response.body);
     print(response.statusCode);
     if (response.statusCode == 200) {
       getHistoryOrders();
@@ -88,7 +84,6 @@ class HistoryOrdersService {
       lang = 'tm';
     }
     print('$serverURL/api/user/$lang/order/$id');
-    print(token);
 
     final response = await http.get(
       Uri.parse(
@@ -101,7 +96,6 @@ class HistoryOrdersService {
     );
     if (response.statusCode == 200) {
       final responseJson = json.decode(response.body)['data'];
-      print(responseJson);
       return HistoryOrdersModelByID.fromJson(responseJson);
     } else {
       return HistoryOrdersModelByID();
@@ -159,7 +153,6 @@ class HistoryOrdersService {
     print(
       '$serverURL/api/user/$lang/prepayment/$orderId',
     );
-    print(response.body);
     print(response.statusCode);
     if (response.statusCode == 200) {
       final responseJson = json.decode(response.body);

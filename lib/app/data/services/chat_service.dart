@@ -14,7 +14,6 @@ class ChatService {
       HttpHeaders.authorizationHeader: 'Bearer $token',
     });
     print('GET Messages Status Code: ${response.statusCode}'); // Added for debugging
-    print('GET Messages Response Body: ${response.body}'); // Added for debugging
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> decoded = json.decode(response.body);
@@ -39,7 +38,6 @@ class ChatService {
       }),
     );
     print('Status Code: ${response.statusCode}'); // Added for debugging
-    print('Response Body: ${response.body}'); // Added for debugging
 
     if (response.statusCode != 201 && response.statusCode != 200) {
       throw Exception('Failed to send message');

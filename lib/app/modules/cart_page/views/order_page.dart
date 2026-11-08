@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:nabelli_ecommerce/app/constants/iconly.dart';
 import 'package:get/get.dart';
 import 'package:nabelli_ecommerce/app/constants/buttons/agree_button_view.dart';
 import 'package:nabelli_ecommerce/app/constants/constants.dart';
@@ -34,6 +34,7 @@ class OrderPage extends StatefulWidget {
 enum PaymentMethod { cash, creditCard }
 
 class _OrderPageState extends State<OrderPage> {
+  bool _submitting = false;
   final TextEditingController addressController = TextEditingController();
   final CartPageController cartController = Get.find<CartPageController>();
   final TextEditingController cityController = TextEditingController();
@@ -268,24 +269,35 @@ class _OrderPageState extends State<OrderPage> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: AgreeButton(
                 text: 'orderMe'.tr + ' ${price.toStringAsFixed(2)} TMT',
-                onTap: () {
-                  if (_orderPage.currentState!.validate()) {
-                    homeController.agreeButton.value = !homeController.agreeButton.value;
-                    CreateOrderService()
-                        .createOrder(userName: userNameController.text, userPhoneNumber: phoneController.text, address: '$name + ${addressController.text}', note: '', transport: orderTypeNum)
-                        .then((value) {
-                      if (value == 200) {
-                        cartController.cartListToCompare.clear();
-                        cartController.removeAllCartElements();
-                        homeController.agreeButton.value = !homeController.agreeButton.value;
-                        Get.off(() => const OrderSuccessView());
-                      } else {
-                        showSnackBar('errorTitle'.tr + '$value', 'error', Colors.red);
-                        homeController.agreeButton.value = !homeController.agreeButton.value;
-                      }
-                    });
-                  } else {
+                onTap: () async {
+                  if (_submitting) return;
+                  if (!_orderPage.currentState!.validate()) {
                     showSnackBar('noConnection3', 'errorEmpty', Colors.red);
+                    return;
+                  }
+
+                  _submitting = true;
+                  homeController.agreeButton.value = true;
+                  try {
+                    final status = await CreateOrderService().createOrder(
+                      userName: userNameController.text,
+                      userPhoneNumber: phoneController.text,
+                      address: '$name, ${addressController.text}',
+                      note: '',
+                      transport: orderTypeNum,
+                    );
+                    if (!mounted) return;
+                    if (status == 200) {
+                      cartController.removeAllCartElements();
+                      Get.off(() => const OrderSuccessView());
+                    } else {
+                      showSnackBar('errorTitle'.tr + '$status', 'error', Colors.red);
+                    }
+                  } catch (_) {
+                    if (mounted) showSnackBar('errorTitle', 'error', Colors.red);
+                  } finally {
+                    _submitting = false;
+                    homeController.agreeButton.value = false;
                   }
                 },
               ),

@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:nabelli_ecommerce/app/constants/iconly.dart';
 import 'package:get/get.dart';
 import 'package:nabelli_ecommerce/app/constants/cards/order_history_card.dart';
 import 'package:nabelli_ecommerce/app/constants/custom_app_bar.dart';
@@ -337,11 +337,6 @@ class HistoryOrderProductProfil extends StatelessWidget {
                   title: Text(phoneNumber, style: const TextStyle(fontFamily: gilroyMedium)),
                   onTap: () {
                     final smsBody = '$phoneNumber ${prepaymentAmount.toStringAsFixed(2)}';
-                    print(smsBody);
-                    print(smsBody);
-                    print(smsBody);
-                    print(smsBody);
-                    print(smsBody);
                     _sendSmsIntent('0804', smsBody);
                     Get.back();
                   },

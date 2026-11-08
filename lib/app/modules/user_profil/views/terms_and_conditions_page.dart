@@ -30,8 +30,6 @@ class TermsAndConditions extends StatelessWidget {
               } else if (snapshot.data == null) {
                 return referalPageEmptyData();
               }
-              final String lang = Get.locale!.languageCode;
-              print(Get.locale!.languageCode);
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView(
