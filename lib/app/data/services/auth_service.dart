@@ -35,7 +35,7 @@ class Auth {
 
   Future<bool> setRefreshToken(String token) async {
     await storage.write('RefreshToken', token);
-    return storage.read('AccessToken') == null ? false : true;
+    return storage.read('RefreshToken') != null;
   }
 
   Future<String?> getRefreshToken() async {

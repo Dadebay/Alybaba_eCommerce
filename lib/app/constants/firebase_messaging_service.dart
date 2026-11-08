@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:nabelli_ecommerce/app/constants/local_notifications_service.dart';
+import 'package:nabelli_ecommerce/app/data/services/fcm_service.dart';
 
 class FirebaseMessagingService {
   FirebaseMessagingService._internal();
@@ -30,11 +31,8 @@ class FirebaseMessagingService {
   }
 
   Future<void> _handlePushNotificationsToken() async {
-    final token = await FirebaseMessaging.instance.getToken();
-    print('Push notifications token: $token');
-
-    FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) {
-      print('FCM token refreshed: $fcmToken');
+    FirebaseMessaging.instance.onTokenRefresh.listen((_) {
+      FCMService().sendFcmToken();
     }).onError((error) {
       print('Error refreshing FCM token: $error');
     });
@@ -51,7 +49,6 @@ class FirebaseMessagingService {
   }
 
   void _onForegroundMessage(RemoteMessage message) {
-    print('Foreground message received: ${message.data.toString()}');
     final notificationData = message.notification;
     if (notificationData != null) {
       _localNotificationsService?.showNotification(notificationData.title, notificationData.body, message.data.toString());
@@ -59,11 +56,9 @@ class FirebaseMessagingService {
   }
 
   void _onMessageOpenedApp(RemoteMessage message) {
-    print('Notification caused the app to open: ${message.data.toString()}');
   }
 }
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print('Background message received: ${message.data.toString()}');
 }

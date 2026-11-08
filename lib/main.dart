@@ -1,5 +1,3 @@
-import 'dart:io';
-
 // import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -17,16 +15,8 @@ import 'app/constants/utils.dart';
 import 'app/modules/auth/views/connection_check_view.dart';
 import 'app/modules/home/controllers/color_controller.dart';
 
-class MyHttpOverrides extends HttpOverrides {
-  @override
-  HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
-  }
-}
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  HttpOverrides.global = MyHttpOverrides();
   SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.edgeToEdge,
   );
@@ -49,8 +39,6 @@ Future<void> main() async {
     await FirebaseMessaging.instance.subscribeToTopic('EVENT');
     print('✅ [FCM] "EVENT" topic-ine subscribe edildi.');
 
-    final fcmToken = await FirebaseMessaging.instance.getToken();
-    print('📱 [FCM] Device Token: $fcmToken');
   } catch (e) {
     print('❌ [FCM] "EVENT" topic-ine subscribe edilemedi: $e');
   }

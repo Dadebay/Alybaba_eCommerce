@@ -14,8 +14,8 @@ import '../../home/controllers/color_controller.dart';
 class AuthView extends StatelessWidget {
   AuthView({Key? key}) : super(key: key);
   final ColorController colorController = Get.put(ColorController());
-  TextEditingController phoneNumberController = TextEditingController();
-  FocusNode phoneNumberFocusNode = FocusNode();
+  final TextEditingController phoneNumberController = TextEditingController();
+  final FocusNode phoneNumberFocusNode = FocusNode();
   final login = GlobalKey<FormState>();
   final HomeController homeController = Get.put(HomeController());
 

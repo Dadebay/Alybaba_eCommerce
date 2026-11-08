@@ -3,14 +3,13 @@ import 'package:get/get.dart';
 import 'package:nabelli_ecommerce/app/constants/constants.dart';
 import 'package:nabelli_ecommerce/app/modules/auth/views/connection_check_view.dart';
 import 'package:nabelli_ecommerce/app/modules/user_profil/controllers/user_profil_controller.dart';
-import 'package:restart_app/restart_app.dart';
 
 class ChangeLangButton extends StatelessWidget {
   ChangeLangButton({required this.index, Key? key}) : super(key: key);
   final int index;
-  List icon = [tmIcon, ruIcon, engIcon];
-  List lang = ['Türkmen dili', 'Rus dili', 'Iňlis dili'];
-  List langText = ['tm', 'ru', 'en'];
+  final List<String> icon = [tmIcon, ruIcon, engIcon];
+  final List<String> lang = ['Türkmen dili', 'Rus dili', 'Iňlis dili'];
+  final List<String> langText = ['tm', 'ru', 'en'];
   final UserProfilController userProfilController = Get.put(UserProfilController());
   @override
   Widget build(BuildContext context) {
